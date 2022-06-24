@@ -1,37 +1,48 @@
 {
-    "name": "ping",
-    "version": "1.0.0",
-    "description": "Rust IDE",
-    "main": "dist/index.js",
-    "authors": [
-        "adrien.pingard",
-        "tom.dunand",
-        "samuel.fouchard",
-        "romain.nakusi",
-        "sacha.belier"
-    ],
-    "scripts": {
-        "build": "tsc",
-        "start": "npm run build && electron .",
-        "backend": "npm run build && node dist/Myide/myide.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/TheSnowyxGIT/PING.git"
-    },
-    "keywords": [
-        "IDE",
-        "Rust",
-        "Cargo"
-    ],
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/TheSnowyxGIT/PING/issues"
-    },
-    "homepage": "https://github.com/TheSnowyxGIT/PING#readme",
+    "name": "react-electron-test",
+    "version": "0.1.0",
+    "private": true,
+    "homepage": ".",
     "dependencies": {
+        "@testing-library/jest-dom": "^5.16.4",
+        "@testing-library/react": "^13.3.0",
+        "@testing-library/user-event": "^13.5.0",
+        "@types/jest": "^27.5.2",
+        "@types/node": "^16.11.41",
+        "@types/react": "^18.0.14",
+        "@types/react-dom": "^18.0.5",
         "electron": "^19.0.6",
-        "typescript": "^4.7.4"
+        "node-sass": "^7.0.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-scripts": "^5.0.1",
+        "typescript": "^4.7.4",
+        "web-vitals": "^2.1.4"
+    },
+    "scripts": {
+        "start:web": "react-scripts start",
+        "build:web": "react-scripts build",
+        "build:desktop": "tsc -p electron/tsconfig.json",
+        "start:desktop": "npm run build:desktop && electron build/electron.js",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
     }
 }

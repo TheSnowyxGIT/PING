@@ -1,5 +1,5 @@
-import fs from "fs";
-import p from "path";
+import * as fs from "fs";
+import * as p from "path";
 
 
 export enum NodeType {

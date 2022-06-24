@@ -1,6 +1,6 @@
 import { Aspect_ , AllAspects} from "./aspect";
 import { FeatureType, Feature_ } from "./feature";
-import { MyNode, Node_ } from "./node";
+import { MyNode } from "./node";
 
 export interface Project_ {
     /**
@@ -66,7 +66,7 @@ export class MyProject implements Project_ {
     public getFeatures(): Feature_[] {
         let aspects = this.getAspects();
         let all_features: Feature_[] = [];
-        for (let aspect of aspects){
+        for (let aspect of Array.from(aspects.values())){
             all_features.concat(aspect.getFeatureList());
         }
         return all_features;

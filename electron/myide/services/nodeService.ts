@@ -1,5 +1,5 @@
 import { MyNode, NodeType, Node_ } from "../entity/node"
-import fs from "fs";
+import * as fs from "fs";
 
 export default class NodeService {
 
