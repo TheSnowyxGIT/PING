@@ -1,9 +1,12 @@
 import {ipcRenderer} from "electron"
+import { Report } from "./report";
 
-export function sendMessage(msg: string): void {
-    ipcRenderer.send("msg", msg);
-}
 
-export function onMessage(listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void): void {
-    ipcRenderer.on("msg", listener);
+
+export interface FileUpdate {
+    path: string;
+    data: Uint8Array;
+};
+export function saveFile(data: FileUpdate): Report {
+    return ipcRenderer.sendSync("saveFile", data) as Report;
 }

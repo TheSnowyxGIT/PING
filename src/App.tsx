@@ -1,17 +1,13 @@
-import React from 'react';
+import { useState, KeyboardEvent } from 'react';
+import Editor from "./components/Editor"
 
 function App() {
 
-  window.electron.onMessage((e, data) => {
-    console.log(data)
-  })
+  const [text, setText] = useState("");
 
   return (
     <div className="App">
-     <h1>Hello World</h1>
-     <button onClick={() => {
-        window.electron.sendMessage("coucou du renderer process")
-     }}></button>
+      <Editor text={''} filePath={"file/path/test"} />
     </div>
   );
 }
