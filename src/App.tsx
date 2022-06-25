@@ -1,17 +1,13 @@
 import React from 'react';
+import { AlertType } from './components/Alert';
+import AlertQueue from './components/AlertQueue';
 
 function App() {
-
-  window.electron.onMessage((e, data) => {
-    console.log(data)
-  })
 
   return (
     <div className="App">
      <h1>Hello World</h1>
-     <button onClick={() => {
-        window.electron.sendMessage("coucou du renderer process")
-     }}></button>
+     <AlertQueue />
     </div>
   );
 }

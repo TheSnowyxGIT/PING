@@ -1,0 +1,24 @@
+@mixin media-min($_min-width) {
+    @media screen and (min-width: $_min-width) {
+        & {
+            @content;
+        }
+    }
+}
+
+.Alerts {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    @include media-min(600px) {
+        left: auto;
+        width: 50%;
+    }
+    @include media-min(1250px) {
+        width: 30%;
+    }
+    .AlertBox {
+        margin-top: 2px;
+    }
+}
