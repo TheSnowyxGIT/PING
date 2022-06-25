@@ -1,0 +1,24 @@
+.tree-node{
+    display: flex;
+    flex-direction: column;
+
+
+    .info{
+        display: flex;
+
+        &.file{
+           .collapse{
+            display: none;
+           }
+        }
+
+        .name{
+            margin-left: 10px;
+        }
+    }
+
+    .children{
+        margin-left: 20px;
+        
+    }
+}
