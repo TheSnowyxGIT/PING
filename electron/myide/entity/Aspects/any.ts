@@ -34,7 +34,7 @@ export default class Any implements Aspect_ {
         return Any.features_;
     }
 
-    checkActive(project: Project_): boolean {
+    public async checkActive(project: Project_): Promise<boolean> {
         return true; // Always actived
     }
  

@@ -11,7 +11,7 @@ export default class ProjectService {
 
         let project = new MyProject(rootNode);
 
-        project.loadAspect();
+        await project.loadAspect();
 
         return project;
     }
@@ -21,7 +21,7 @@ export default class ProjectService {
         if (feature == null){
             throw new Error("The project does not contains the feature used");
         }
-        return feature.execute(project, params);
+        return await feature.execute(project, params);
     }
 
 

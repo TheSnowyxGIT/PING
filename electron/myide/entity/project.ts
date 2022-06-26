@@ -72,10 +72,11 @@ export class MyProject implements Project_ {
         return all_features;
     }
 
-    public loadAspect(): void {
+    public async loadAspect(): Promise<void> {
         this.aspects_ = new Set();
         for (let aspect of AllAspects){
-            if (aspect.checkActive(this)){
+            let actived = await aspect.checkActive(this);
+            if (actived){
                 this.aspects_.add(aspect);
             }
         }
