@@ -1,22 +1,18 @@
+import {exists_script, run_script} from "../utils/runScripts";
 import { NodeType } from "./entity/node";
 import ProjectService from "./services/projectService";
 
 
 let ps = new ProjectService();
-let project = ps.load("C:\\Users\\Adrien\\Desktop\\gracious_jennings-ping-2024");
+let project = ps.load("C:\\Users\\Adrien\\Desktop\\testcratesio\\testtttes");
+
 
 project.then(async (project) => {
     
-    const nodeService = ps.getNodeService();
+    console.log(Array.from(project.getAspects()).length)
 
    
-
-    let node = project.getRootNode().findChild("lesuperfichier");
-    if (node !== null){
-        await nodeService.update(node, 0, 0, Buffer.from('1234'));
-    } else {
-        await nodeService.create(project.getRootNode(), "lesuperfichier", NodeType.FILE);
-    }
         
 
 })
+

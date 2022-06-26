@@ -4,7 +4,7 @@ import { Project_ } from "../project";
 
 class CleanUp implements Feature_ {
 
-    execute(project: Project_, ...params: any[]): ExecutionReport | null {
+    async execute(project: Project_, ...params: any[]): Promise<ExecutionReport | null> {
         return null;
     }
 
@@ -34,7 +34,7 @@ export default class Any implements Aspect_ {
         return Any.features_;
     }
 
-    checkActive(project: Project_): boolean {
+    public async checkActive(project: Project_): Promise<boolean> {
         return true; // Always actived
     }
  

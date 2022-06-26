@@ -14,7 +14,7 @@ export interface Feature_ {
      * @param params  Parameters given to the features.
      * @return {@link ExecutionReport}
      */
-    execute(project: Project_, ...params: any[]): ExecutionReport | null;
+    execute(project: Project_, ...params: any[]): Promise<ExecutionReport | null>;
 
     /**
      * @return The type of the Feature.

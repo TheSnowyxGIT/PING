@@ -11,17 +11,17 @@ export default class ProjectService {
 
         let project = new MyProject(rootNode);
 
-        project.loadAspect();
+        await project.loadAspect();
 
         return project;
     }
 
-    public execute(project: MyProject, featureType: FeatureType, ...params: any[]) : ExecutionReport | null {
+    public async execute(project: MyProject, featureType: FeatureType, ...params: any[]) : Promise<ExecutionReport | null> {
         let feature = project.getFeature(featureType);
         if (feature == null){
             throw new Error("The project does not contains the feature used");
         }
-        return feature.execute(project, params);
+        return await feature.execute(project, params);
     }
 
 
