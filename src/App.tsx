@@ -1,4 +1,5 @@
 import React from 'react';
+import { FeatureType } from '../electron/myide/entity/feature';
 import { AlertType } from './components/Alert';
 import AlertQueue from './components/AlertQueue';
 

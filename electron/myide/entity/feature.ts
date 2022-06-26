@@ -5,7 +5,10 @@ export enum FeatureType {
 };
 
 export interface ExecutionReport {
-    isSuccess(): boolean;
+    isSuccess: boolean
+    message?: string
+    stdout?: string;
+    stderr?: string;
 }
 
 export interface Feature_ {
@@ -14,7 +17,7 @@ export interface Feature_ {
      * @param params  Parameters given to the features.
      * @return {@link ExecutionReport}
      */
-    execute(project: Project_, ...params: any[]): ExecutionReport | null;
+    execute(project: Project_, ...params: any[]): ExecutionReport;
 
     /**
      * @return The type of the Feature.
