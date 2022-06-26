@@ -4,7 +4,7 @@ import { Project_ } from "../project";
 
 class CleanUp implements Feature_ {
 
-    async execute(project: Project_, ...params: any[]): Promise<ExecutionReport | null> {
+    execute(project: Project_, ...params: any[]): ExecutionReport {
         return null;
     }
 

@@ -16,7 +16,7 @@ export default class ProjectService {
         return project;
     }
 
-    public async execute(project: MyProject, featureType: FeatureType, ...params: any[]) : Promise<ExecutionReport | null> {
+    public execute(project: MyProject, featureType: FeatureType, ...params: any[]) : ExecutionReport {
         let feature = project.getFeature(featureType);
         if (feature == null){
             throw new Error("The project does not contains the feature used");
