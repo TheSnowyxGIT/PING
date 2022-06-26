@@ -4,7 +4,7 @@ import { Project_ } from "../project";
 
 class CleanUp implements Feature_ {
 
-    execute(project: Project_, ...params: any[]): ExecutionReport | null {
+    execute(project: Project_, ...params: any[]): ExecutionReport {
         return null;
     }
 
