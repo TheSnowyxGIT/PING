@@ -8,6 +8,11 @@ export interface RunScriptReport {
     stdout: string
 }
 
+export interface DataCallbacks {
+    stdout?: (str: string) => void;
+    stderr?: (str: string) => void;
+}
+
 export async function exists_script(script: string): Promise<boolean> {
     const path = await lookpath(script);
     return path !== undefined;
@@ -16,8 +21,15 @@ export async function exists_script(script: string): Promise<boolean> {
 // This function will output the lines from the script 
 // and will return the full combined output
 // as well as exit code when it's done (using the callback).
-export function run_script(command: string, args: string[], path: string): Promise<RunScriptReport> {
+export function run_script(command: string, args: string[], path: string, opt?: DataCallbacks): Promise<RunScriptReport> {
     return new Promise((resolve, reject) => {
+        let stdoutCallback = (str: string) => {};
+        let stderrCallback = (str: string) => {};
+        if (opt){
+            stdoutCallback = opt.stdout || stdoutCallback;
+            stderrCallback = opt.stderr || stderrCallback;
+        }
+
         var child = child_process.spawn(command, args, {
             cwd: path
         });
@@ -34,10 +46,12 @@ export function run_script(command: string, args: string[], path: string): Promi
 
         child.stdout.on('data', (data) => {
             //Here is the output
+            stdoutCallback(data.toString());
             stdout += data.toString();   
         });
         child.stderr.on('data', (data) => {
             //Here is the output from the command
+            stderrCallback(data.toString());
             stderr += data.toString();   
         });
     

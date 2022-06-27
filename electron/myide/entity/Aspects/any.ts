@@ -1,17 +1,24 @@
+import { Report } from "../../../utils/report";
 import { AspectType, Aspect_ } from "../aspect";
-import { ExecutionReport, FeatureType, Feature_ } from "../feature";
-import { Project_ } from "../project";
+import {FeatureParams, FeatureType, Feature_ } from "../feature";
+import { MyProject } from "../project";
 
-class CleanUp implements Feature_ {
+class ReloadAspects implements Feature_ {
 
-    execute(project: Project_, ...params: any[]): ExecutionReport {
-        return null;
+    async execute(project: MyProject, params: FeatureParams): Promise<Report> {
+        await project.loadAspect();
+        return Report.getReport({
+            isSuccess: true,
+            message: "Aspects of projects have been loaded.",
+            data: {
+                aspects: Array.from(project.getAspects()).map(aspect => aspect.getType())
+            }
+        });
     }
 
     type(): FeatureType {
-        return FeatureType.CLEANUP;
+        return FeatureType.ANY_RELOAD_ASPECTS;
     }
-    
 }
 
 
@@ -23,7 +30,7 @@ export default class Any implements Aspect_ {
      * List of all features of this Aspect
      */
     private static features_: Feature_[] = [
-        new CleanUp()
+        new ReloadAspects()
     ]
 
     getType(): AspectType {
@@ -34,7 +41,7 @@ export default class Any implements Aspect_ {
         return Any.features_;
     }
 
-    public async checkActive(project: Project_): Promise<boolean> {
+    public async checkActive(project: MyProject): Promise<boolean> {
         return true; // Always actived
     }
  

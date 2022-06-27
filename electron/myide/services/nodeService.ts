@@ -1,4 +1,4 @@
-import { MyNode, NodeType, Node_ } from "../entity/node"
+import { MyNode, NodeType } from "../entity/node"
 import * as fs from "fs";
 
 export default class NodeService {
