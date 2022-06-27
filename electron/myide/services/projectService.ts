@@ -1,5 +1,6 @@
-import { Report } from "../../utils/report";
-import { FeatureParams, FeatureType } from "../entity/feature";
+import { FeatureType } from "../../../src/shared/ideEnums";
+import { Report } from "../../../src/shared/report";
+import { FeatureParams } from "../entity/feature";
 import { MyNode } from "../entity/node";
 import { MyProject } from "../entity/project";
 import NodeService from "./nodeService";
@@ -17,7 +18,7 @@ export default class ProjectService {
         return project;
     }
 
-    public async execute(project: MyProject, featureType: FeatureType, params: FeatureParams) : Promise<Report> {
+    public async execute(project: MyProject, featureType: FeatureType, params: FeatureParams) : Promise<Report<unknown>> {
         let feature = project.getFeature(featureType);
         if (feature == null){
             return Report.getReport({

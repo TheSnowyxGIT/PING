@@ -1,8 +1,10 @@
-import {app, BrowserWindow, ipcMain } from "electron";
+import {app, BrowserWindow } from "electron";
 import * as p from "path";
 import "./listener"
+import "./menu"
 
 import "./myide/myide"
+
 
 function createWindow(){
     const win = new BrowserWindow({
@@ -13,13 +15,15 @@ function createWindow(){
         }
     });
 
-    win.loadFile(p.join(__dirname, "index.html"))
+    win.loadFile(p.join(__dirname, "../index.html"))
 
     win.webContents.openDevTools();
 }
 
 app.on("ready", () => {
     createWindow()
+
+
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()

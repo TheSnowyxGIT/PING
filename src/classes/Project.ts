@@ -1,16 +1,15 @@
-import { AspectType } from "../../electron/myide/entity/aspect";
-import { FilesTree } from "./FilesTree";
+import { F_Aspect, F_Node, F_Project } from "../shared/F_interfaces";
 
-export class Project {
-    public path: string;
-    public rootName: string;
-    public aspects: AspectType[];
-    public files: FilesTree;
+export class Project implements F_Project {
+    public rootNode: F_Node;
+    public aspects: F_Aspect[];
 
-    constructor(path: string, rootName: string, aspects: AspectType[], files: FilesTree){
-        this.path = path;
-        this.rootName = rootName;
+    public static of(project: F_Project): Project{
+        return project as Project
+    }
+
+    constructor(rootNode: F_Node, aspects: F_Aspect[]){
         this.aspects = aspects;
-        this.files = files;
+        this.rootNode = rootNode;
     }
 }

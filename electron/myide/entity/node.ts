@@ -1,13 +1,17 @@
 import * as fs from "fs";
 import * as p from "path";
-import { Report } from "../../utils/report";
+import { Report } from "../../../src/shared/report";
+import { NodeType } from "../../../src/shared/ideEnums"
+import { F_Node } from "../../../src/shared/F_interfaces";
 
-
-export enum NodeType {
-    FILE,
-    FOLDER,
-    OTHER
-};
+export function F_NodeFrom(node: MyNode): F_Node {
+    return {
+        path: node.getPath(),
+        type: node.getType(),
+        name: node.getName(),
+        children: node.getChildren().map(child => F_NodeFrom(child))
+    }
+}
 
 export class MyNode {
 

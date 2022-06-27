@@ -1,14 +1,15 @@
-import { Report } from "../../../utils/report";
+import { AspectType, FeatureType } from "../../../../src/shared/ideEnums";
+import { Report } from "../../../../src/shared/report";
 import { exists_script, run_script } from "../../../utils/runScripts";
-import { AspectType, Aspect_ } from "../aspect";
-import { FeatureParams, FeatureType, Feature_ } from "../feature";
+import { Aspect_ } from "../aspect";
+import { FeatureParams, Feature_ } from "../feature";
 import { MyProject } from "../project";
 
 
 
 class CargoBuild implements Feature_ {
 
-    async execute(project: MyProject, params: FeatureParams): Promise<Report> {
+    async execute(project: MyProject, params: FeatureParams): Promise<Report<null>> {
         let rootNode = project.getRootNode();
 
         let report = await run_script("cargo", ["build"], rootNode.getPath(), {
@@ -42,6 +43,10 @@ export default class Cargo implements Aspect_ {
 
     getType(): AspectType {
         return AspectType.CARGO;
+    }
+
+    getName(): string {
+        return "Cargo";
     }
 
     getFeatureList(): Feature_[] {

@@ -4,7 +4,7 @@ import ProjectHeader from "./ProjectHeader";
 import { Tree } from "./Tree";
 
 interface ProjectWindowProps {
-    project: Project;
+    project: Project | null;
 }
  
 interface ProjectWindowState {
@@ -16,11 +16,15 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
         super(props);
         this.state = {};
     }
-    render() { 
+    render() {
+
+        if (this.props.project === null)
+            return null;
+
         return (
             <div>
-                <ProjectHeader name={this.props.project.rootName}/>
-                <Tree node={this.props.project.files}/>
+                <ProjectHeader name={this.props.project.rootNode.name}/>
+                <Tree node={this.props.project.rootNode}/>
             </div>
         );
     }

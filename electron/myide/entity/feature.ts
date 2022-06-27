@@ -1,11 +1,6 @@
-import { Report } from "../../utils/report";
+import { FeatureType } from "../../../src/shared/ideEnums";
+import { Report } from "../../../src/shared/report";
 import { MyProject} from "./project";
-
-export enum FeatureType {
-    ANY_RELOAD_ASPECTS,
-    CARGO_BUILD
-};
-
 
 export interface FeatureParams {
     errCallback: (chunk: string) => void,
@@ -19,7 +14,7 @@ export interface Feature_ {
      * @param params  Parameters given to the features.
      * @return {@link ExecutionReport}
      */
-    execute(project: MyProject, params: FeatureParams): Promise<Report>;
+    execute(project: MyProject, params: FeatureParams): Promise<Report<unknown>>;
 
     /**
      * @return The type of the Feature.

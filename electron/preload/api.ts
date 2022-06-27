@@ -1,21 +1,16 @@
 import {ipcRenderer} from "electron"
-import { ExecFeatureOptions, OpenProjectOptions } from "../listener";
-import { AspectType } from "../myide/entity/aspect";
-import { FeatureType } from "../myide/entity/feature";
-import { Report } from "../utils/report";
+import { F_Node, F_Project } from "../../src/shared/F_interfaces";
+import { FeatureType } from "../../src/shared/ideEnums";
+import { CreateFileOptions, ExecFeatureOptions, OpenProjectOptions } from "../listener";
+import { Report } from "../../src/shared/report";
 
 /** Transfere Enums */
-
-export const featureType = FeatureType;
-export const aspectType = AspectType;
-
-
 
 interface FeatureFrontParams {
     out?: (chunk: string) => void,
     err?: (chunk: string) => void
 }
-export function execFeature(feature: FeatureType, params: FeatureFrontParams) : Promise<Report> {
+export function execFeature<T>(feature: FeatureType, params: FeatureFrontParams) : Promise<Report<T>> {
     return new Promise(async (resolve, reject) => {
         let channel = `execFeature`;
         let execId = Math.floor(Math.random() * 1000000000);
@@ -47,7 +42,7 @@ export function execFeature(feature: FeatureType, params: FeatureFrontParams) : 
         }
         ipcRenderer.on(outChannel, outHandler);
 
-        function reportHandler(event: Electron.IpcRendererEvent, report: Report){
+        function reportHandler(event: Electron.IpcRendererEvent, report: Report<T>){
             ipcRenderer.removeListener(outChannel, outHandler);
             ipcRenderer.removeListener(errChannel, errHandler);
 
@@ -61,7 +56,8 @@ export function execFeature(feature: FeatureType, params: FeatureFrontParams) : 
 }
 
 
-export async function openProject(path: string): Promise<Report> {
+
+export async function openProject(): Promise<Report<F_Project>> {
     return new Promise((resolve, reject) => {
         let channel = `openProject`;
         let execId = Math.floor(Math.random() * 1000000000);
@@ -70,11 +66,42 @@ export async function openProject(path: string): Promise<Report> {
          let reportChannel = channel + ":report" + execId;
     
          let options: OpenProjectOptions = {
-            path: path,
             reportChannel: reportChannel,
         }
     
-        function reportHandler(event: Electron.IpcRendererEvent, report: Report){
+        function reportHandler(event: Electron.IpcRendererEvent, report: Report<F_Project>){
+            ipcRenderer.removeListener(reportChannel, reportHandler);
+            resolve(report);
+        }
+    
+        ipcRenderer.send(channel, options);
+        ipcRenderer.on(reportChannel, reportHandler)
+    })
+}
+
+export function onProjectOpened(listener: (report: Report<F_Project>) => void){
+    ipcRenderer.on("openProject", (_, report: Report<F_Project>) => {
+        listener(report);
+    })
+}
+
+
+
+export function createFile(folderPath: string, name: string): Promise<Report<F_Node>> {
+    return new Promise((resolve, reject) => {
+        let channel = `createFile`;
+        let execId = Math.floor(Math.random() * 1000000000);
+    
+         // Channel of the response
+         let reportChannel = channel + ":report" + execId;
+    
+         let options: CreateFileOptions = {
+             reportChannel: reportChannel,
+             folderPath: folderPath,
+             name: name
+         }
+    
+        function reportHandler(event: Electron.IpcRendererEvent, report: Report<F_Node>){
             ipcRenderer.removeListener(reportChannel, reportHandler);
             resolve(report);
         }
