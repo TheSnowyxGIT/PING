@@ -1,24 +1,7 @@
 import React, { ReactElement, MouseEvent } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faChevronRight, faChevronDown, faFolder, faFile} from "@fortawesome/free-solid-svg-icons"
-
-export enum NodeType{
-    File,
-    Folder,
-    Other
-}
-
-export class FilesTree {
-  public name: string;
-  public childrens: FilesTree[];
-  public type: NodeType;
-
-  constructor(name: string, childrens: FilesTree[], type: NodeType) {
-    this.name = name;
-    this.childrens = childrens;
-    this.type = type;
-  }
-}
+import { FilesTree, NodeType } from "../classes/FilesTree";
 
 interface TreeProps {
   node: FilesTree;

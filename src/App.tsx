@@ -1,15 +1,10 @@
 import { type } from 'os';
 import React from 'react';
+import { FilesTree, NodeType } from './classes/FilesTree';
 import { Project } from './classes/Project';
 import AlertQueue from './components/AlertQueue';
-
-function App() {
-
-  /*const project = new Project("C:\\Users\\Adrien\\Desktop\\testcratesio\\testtttes")
-  console.log(project.rootName)*/
-  
 import ProjectWindow from './components/ProjectWindow';
-import {Tree, FilesTree, NodeType} from './components/Tree';
+import {Tree} from './components/Tree';
 
 const node4= new FilesTree("file2", [], NodeType.File);
 const node3= new FilesTree("file1", [], NodeType.File); 
@@ -19,6 +14,8 @@ const root = new FilesTree("root", [node1],  NodeType.Folder)
 
 
 function App() {
+    /*const project = new Project("C:\\Users\\Adrien\\Desktop\\testcratesio\\testtttes")
+  console.log(project.rootName)*/
   return (
     <div className="App">
      <ProjectWindow projectName={'PING'} fileTree={root}/>

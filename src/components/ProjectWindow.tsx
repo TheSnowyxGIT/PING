@@ -1,11 +1,10 @@
 import React from "react";
+import { Project } from "../classes/Project";
 import ProjectHeader from "./ProjectHeader";
-import { FilesTree, Tree } from "./Tree";
+import { Tree } from "./Tree";
 
 interface ProjectWindowProps {
-    projectName: string;
-    fileTree: FilesTree;
-
+    project: Project;
 }
  
 interface ProjectWindowState {
@@ -20,8 +19,8 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
     render() { 
         return (
             <div>
-                <ProjectHeader name={this.props.projectName}/>
-                <Tree node={this.props.fileTree}/>
+                <ProjectHeader name={this.props.project.rootName}/>
+                <Tree node={this.props.project.files}/>
             </div>
         );
     }
