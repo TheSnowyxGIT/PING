@@ -7,6 +7,7 @@ import { F_Node } from "../../../src/shared/F_interfaces";
 export function F_NodeFrom(node: MyNode): F_Node {
     return {
         path: node.getPath(),
+        relativePath: node.getRelativePath(),
         type: node.getType(),
         name: node.getName(),
         children: node.getChildren().map(child => F_NodeFrom(child))
@@ -16,6 +17,7 @@ export function F_NodeFrom(node: MyNode): F_Node {
 export class MyNode {
 
     private path_: string;
+    private relativePath_;
     private type_: NodeType;
     private children_: MyNode[];
     private parent_: MyNode | null;
@@ -42,8 +44,11 @@ export class MyNode {
                         type = NodeType.FILE;
                     if (stat.isDirectory())
                         type = NodeType.FOLDER;
-                    let name = p.basename(path)
-                    let node = new MyNode(name, path, type, parent);
+                    let name = p.basename(path);
+                    let relativePath = name;
+                    if (parent !== null)
+                        relativePath = p.join(parent.getRelativePath(), name);
+                    let node = new MyNode(name, path, relativePath, type, parent);
                     if (type === NodeType.FOLDER){
                         fs.readdir(path, async (err, files) => {
                             if (err){
@@ -75,7 +80,7 @@ export class MyNode {
             fs.access(path, fs.constants.F_OK, err => {
                 if (err){
                     let name = p.basename(path)
-                    let node = new MyNode(name, path, type, null);
+                    let node = new MyNode(name, path, name, type, null);
                     node.createFsObj()
                     return resolve(node);
                 }
@@ -97,7 +102,10 @@ export class MyNode {
             let path = p.join(parent.getPath(), name);
             fs.access(path, fs.constants.F_OK, async err => {
                 if (err){
-                    let node = new MyNode(name, path, type, parent);
+                    let relativePath = name;
+                    if (parent !== null)
+                        relativePath = p.join(parent.getRelativePath(), name);
+                    let node = new MyNode(name, path, relativePath, type, parent);
                     // Create FsObj
                     await node.createFsObj();
                     // add him self as new child of the parent folder
@@ -113,12 +121,13 @@ export class MyNode {
     /**
      * Constructor
     */
-    constructor(name: string, path: string, type: NodeType, parent: MyNode | null){
+    constructor(name: string, path: string, relativePath: string, type: NodeType, parent: MyNode | null){
         this.path_ = path;
         this.type_ = type;
         this.parent_ = parent;
         this.children_ = [];
         this.name_ = name;
+        this.relativePath_ = relativePath;
     }
 
     public getParent(): MyNode | null {
@@ -133,6 +142,14 @@ export class MyNode {
      * @return The Node path.
      */
     public getPath(): string {
+        return this.path_;
+    }
+
+    
+     /**
+     * @return The Node relative.
+     */
+      public getRelativePath(): string {
         return this.path_;
     }
 
