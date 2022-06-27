@@ -1,7 +1,8 @@
 export declare global {
     interface Window {
       // add you custom properties and methods
-      electron: typeof import("../electron/preload/api")
+      electron: typeof import("../electron/preload/api"),
+      libraries: typeof import("../electron/preload/libraries"),
     }
     type Project = import("../electron/myide/entity/project").MyProject
 }
