@@ -150,7 +150,7 @@ export class MyNode {
      * @return The Node relative.
      */
       public getRelativePath(): string {
-        return this.path_;
+        return this.relativePath_;
     }
 
     /**
