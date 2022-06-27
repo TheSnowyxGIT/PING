@@ -1,5 +1,6 @@
 import { type } from 'os';
 import React from 'react';
+import ProjectWindow from './components/ProjectWindow';
 import {Tree, FilesTree, NodeType} from './components/Tree';
 
 const node4= new FilesTree("file2", [], NodeType.File);
@@ -11,7 +12,7 @@ const root = new FilesTree("root", [node1],  NodeType.Folder)
 function App() {
   return (
     <div className="App">
-     <Tree node={root}/>
+     <ProjectWindow projectName={'PING'} fileTree={root}/>
     </div>
   );
 }

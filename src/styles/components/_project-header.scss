@@ -1,0 +1,13 @@
+.project-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .buttons{
+        display: flex;
+        flex-direction: row;
+    .add-file{
+        padding-right: 5px;
+    }
+    }
+}
