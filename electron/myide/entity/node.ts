@@ -275,7 +275,7 @@ export class MyNode {
      */
     public findChild(name: string): MyNode | null{
         for (let child of this.getChildren()){
-            if (child.getName() == name){
+            if (child.getName() === name){
                 return child;
             }
         }
@@ -288,13 +288,13 @@ export class MyNode {
      * @return The node if exists, null otherwise
      */
     public findChildRec(path: string): MyNode | null {
-        let fileName = path.split("/")[0];
+        let fileName = path.split(p.sep)[0];
         for (let child of this.getChildren()){
             if (child.getName() === fileName){
-                if (path.split("/").length == 1){
+                if (path.split(p.sep).length === 1){
                     return child;
                 } else {
-                    let path_splited = path.split("/");
+                    let path_splited = path.split(p.sep);
                     path_splited.splice(0,1);
                     let subpath = p.join.apply(null, path_splited);
                     return this.findChildRec(subpath);
