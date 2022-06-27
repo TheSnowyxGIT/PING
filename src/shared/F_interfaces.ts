@@ -6,6 +6,7 @@ export interface F_Aspect {
 }
 export interface F_Node {
     path: string,
+    relativePath: string;
     type: NodeType,
     children: F_Node[],
     name: string
