@@ -1,22 +1,54 @@
-import { NodeType } from "./entity/node";
+import { Report } from "../utils/report";
+import { FeatureParams, FeatureType } from "./entity/feature";
+import { MyProject } from "./entity/project";
 import ProjectService from "./services/projectService";
 
 
-let ps = new ProjectService();
-let project = ps.load("C:\\Users\\Adrien\\Desktop\\gracious_jennings-ping-2024");
+class MyIde {
 
-project.then(async (project) => {
-    
-    const nodeService = ps.getNodeService();
+    private projectService: ProjectService = new ProjectService();
+    private curr_project: MyProject;
 
-   
-
-    let node = project.getRootNode().findChild("lesuperfichier");
-    if (node !== null){
-        await nodeService.update(node, 0, 0, Buffer.from('1234'));
-    } else {
-        await nodeService.create(project.getRootNode(), "lesuperfichier", NodeType.FILE);
+    constructor(){
+        this.openProject("C:\\Users\\Adrien\\Desktop\\testcratesio\\testtttes")
     }
-        
 
-})
+    public getCurrentProject(){
+        return this.curr_project;
+    }
+
+    public executeFeature(feature: FeatureType, params: FeatureParams): Promise<Report> {
+        return this.projectService.execute(this.getCurrentProject(), feature, params);
+    }
+
+    /**
+     * Open new project
+     * @param path The Path of the new Project
+     * @returns Report
+     */
+    public async openProject(path: string): Promise<Report> {
+        try {
+            let project = await this.projectService.load(path);
+            await project.loadAspect()
+            this.curr_project = project;
+
+            return Report.getReport({
+                isSuccess: true,
+                message: `Project ${project.getRootNode().getName()} succesfully loaded.`,
+                data: {}
+            });
+
+        } catch (err) {
+            if (err instanceof Report){
+                return err;
+            }
+            throw err;
+        }
+    }
+
+
+
+}
+
+export default new MyIde();
+

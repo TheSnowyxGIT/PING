@@ -1,5 +1,8 @@
 import {app, BrowserWindow, ipcMain } from "electron";
 import * as p from "path";
+import "./listener"
+
+import "./myide/myide"
 
 function createWindow(){
     const win = new BrowserWindow({
@@ -13,14 +16,7 @@ function createWindow(){
     win.loadFile(p.join(__dirname, "index.html"))
 
     win.webContents.openDevTools();
-
-    ipcMain.on("msg", (e, data) => {
-        console.log(data)
-        e.sender.send('msg', "coucou du main process");
-    })
 }
-
-
 
 app.on("ready", () => {
     createWindow()

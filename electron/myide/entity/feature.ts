@@ -1,12 +1,17 @@
-import { Project_ } from "./project";
+import { Report } from "../../utils/report";
+import { MyProject} from "./project";
 
 export enum FeatureType {
-    CLEANUP
+    ANY_RELOAD_ASPECTS,
+    CARGO_BUILD
 };
 
-export interface ExecutionReport {
-    isSuccess(): boolean;
-}
+
+export interface FeatureParams {
+    errCallback: (chunk: string) => void,
+    outCallback: (chunk: string) => void,
+    others?: any
+};
 
 export interface Feature_ {
     /**
@@ -14,7 +19,7 @@ export interface Feature_ {
      * @param params  Parameters given to the features.
      * @return {@link ExecutionReport}
      */
-    execute(project: Project_, ...params: any[]): ExecutionReport | null;
+    execute(project: MyProject, params: FeatureParams): Promise<Report>;
 
     /**
      * @return The type of the Feature.

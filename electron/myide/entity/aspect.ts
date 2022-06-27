@@ -1,13 +1,16 @@
 import Any from "./Aspects/any";
+import Cargo from "./Aspects/cargo";
 import { Feature_ } from "./feature";
-import { Project_ } from "./project";
+import { MyProject } from "./project";
 
 export enum AspectType {
-    ANY
+    ANY,
+    CARGO
 };
 
 export let AllAspects: Aspect_[] = [
-    new Any()
+    new Any(),
+    new Cargo()
 ];
 
 export interface Aspect_ {
@@ -24,5 +27,5 @@ export interface Aspect_ {
     /**
      * @return true if the aspect is active in the project, false otherwize
      */
-    checkActive(project: Project_): boolean;
+    checkActive(project: MyProject): Promise<boolean>;
 }
