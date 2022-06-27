@@ -2,6 +2,8 @@ import {app, BrowserWindow, ipcMain } from "electron";
 import * as p from "path";
 import "./listener"
 
+import "./myide/myide"
+
 function createWindow(){
     const win = new BrowserWindow({
         width: 1600,
