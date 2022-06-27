@@ -1,3 +1,4 @@
+import { isNullishCoalesce } from "typescript";
 import { Tree } from "../components/Tree";
 import { F_Node } from "../shared/F_interfaces";
 import { NodeType } from "../shared/ideEnums";
@@ -23,17 +24,32 @@ export class FileNode implements F_Node{
     this.children = children;
 
   }
-  
-  public getChild():FileNode
-  {
-    
+
+  public getChild(path: string[]): FileNode | null{
+    for(const child of this.children)
+    {
+      if (path[0] === child.name)
+      {
+        if (path.length === 1)
+          return child;
+        else
+        {
+          path.shift();
+          return this.getChild(path);
+        }
+      }
+    }
+    return null;
   }
   
   // add node to tree
-  public addNode(pah:string, node: F_Node): boolean {
-    
-    
-    
+  public addNode(node: F_Node): boolean {
+    let path = node.relativePath.split(window.libraries.path.sep);
+    path.pop();
+    let parent = this.getChild(path);
+    if (parent == null)
+      return false;
+    parent.children.push(FileNode.of(node));
     return true;
   }
 
