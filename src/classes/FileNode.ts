@@ -41,5 +41,4 @@ export class FileNode implements F_Node{
     }
     return null;
   }
-
 }

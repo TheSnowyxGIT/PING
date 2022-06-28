@@ -1,7 +1,7 @@
 import {ipcRenderer} from "electron"
 import { F_Node, F_Project } from "../../src/shared/F_interfaces";
 import { FeatureType } from "../../src/shared/ideEnums";
-import { CreateFileOptions, ExecFeatureOptions, OpenProjectOptions } from "../listener";
+import { CreateFileOptions, CreateFolderOptions, ExecFeatureOptions, OpenProjectOptions } from "../listener";
 import { Report } from "../../src/shared/report";
 
 /** Transfere Enums */
@@ -98,6 +98,23 @@ export function createFile(folderPath: string, name: string): void {
 
 export function onFileCreated(listener: (report: Report<F_Node>) => void){
     ipcRenderer.on("createFile", (_, report: Report<F_Node>) => {
+        listener(report);
+    })
+}
+
+
+export function createFolder(folderPath: string, name: string): void {
+    let channel = `createFolder`;
+
+    let options: CreateFolderOptions = {
+         folderPath: folderPath,
+         name: name
+     }
+    ipcRenderer.send(channel, options);
+}
+
+export function onFolderCreated(listener: (report: Report<F_Node>) => void){
+    ipcRenderer.on("createFolder", (_, report: Report<F_Node>) => {
         listener(report);
     })
 }

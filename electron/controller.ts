@@ -68,3 +68,42 @@ export async function createFile(folderPath: string, name: string): Promise<Repo
         throw error;
     }
 }
+
+
+export async function createFolder(folderPath: string, name: string): Promise<Report<F_Node>> {
+    let project = myide.getCurrentProject();
+
+    if (project === null) {
+        return Report.getReport({
+            isSuccess: false,
+            message: `There is no project opened.`
+        })
+    }
+
+    let nodeService = project.getNodeService();
+
+    let folderNode = project.getRootNode().findChildRec(folderPath);
+    if (folderNode === null){
+        return Report.getReport({
+            isSuccess: false,
+            message: `The path ${folderPath} is invalid.`
+        })
+    } else if (!folderNode.isFolder()){
+        return Report.getReport({
+            isSuccess: false,
+            message: `The path ${folderPath} need to be a folder.`
+        });
+    }
+    try {
+        let newNode = await nodeService.create(folderNode, name, NodeType.FOLDER);
+        return Report.getReport<F_Node>({
+            isSuccess: true,
+            data: F_NodeFrom(newNode)
+        });
+    } catch (error) {
+        if (error instanceof Report){
+            return error;
+        }
+        throw error;
+    }
+}
