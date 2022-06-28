@@ -1,27 +1,12 @@
-import React, { ReactElement, MouseEvent } from "react";
+import React, {MouseEvent } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faChevronRight, faChevronDown, faFolder, faFile} from "@fortawesome/free-solid-svg-icons"
+import { FileNode } from "../classes/FileNode";
+import { NodeType } from "../shared/ideEnums";
 
-export enum NodeType{
-    File,
-    Folder,
-    Other
-}
-
-export class FilesTree {
-  public name: string;
-  public childrens: FilesTree[];
-  public type: NodeType;
-
-  constructor(name: string, childrens: FilesTree[], type: NodeType) {
-    this.name = name;
-    this.childrens = childrens;
-    this.type = type;
-  }
-}
 
 interface TreeProps {
-  node: FilesTree;
+  node: FileNode;
 }
 
 interface TreeState {
@@ -35,9 +20,9 @@ export class Tree extends React.Component<TreeProps, TreeState> {
   }
 
   private getInfoClass(): string {
-    if (this.props.node.type === NodeType.Folder)
+    if (this.props.node.type === NodeType.FOLDER)
       return "folder";
-    else if (this.props.node.type === NodeType.File)
+    else if (this.props.node.type === NodeType.FILE)
       return "file";
     return "file";
   }
@@ -55,13 +40,13 @@ export class Tree extends React.Component<TreeProps, TreeState> {
           <div className="collapse" onClick={(event) => this.onCollapseClick(event)}>
             <FontAwesomeIcon icon={ this.state.isCollapse ? faChevronDown : faChevronRight}/>
           </div>
-          <FontAwesomeIcon icon={this.props.node.type === NodeType.Folder ? faFolder : faFile} />
+          <FontAwesomeIcon icon={this.props.node.type === NodeType.FOLDER ? faFolder : faFile} />
           <div className="name">{this.props.node.name}</div>
         </div>
         <div className="children">
         {
           this.state.isCollapse ?
-          this.props.node.childrens.map(child => {
+          this.props.node.children.map(child => {
             return (
               <Tree node={child}/>
             );})

@@ -30,10 +30,10 @@ class ProjectHeader extends React.Component<ProjectHeaderProps, ProjectHeaderSta
             <div className="project-header">
                 <div className="project-name">{this.props.name}</div>
             <div className="buttons">
-                <div className="add-file" onClick={() => this.addFile}>
+                <div className="add-file" onClick={() => this.addFile()}>
                    <FontAwesomeIcon icon={faFileCirclePlus}/>
                 </div>
-                <div className="add-folder" onClick={() => this.addFolder}>
+                <div className="add-folder" onClick={() => this.addFolder()}>
                     <FontAwesomeIcon icon={faFolderPlus}/>
                 </div>
             </div>

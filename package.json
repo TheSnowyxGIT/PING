@@ -29,7 +29,7 @@
         "start:web": "react-scripts start",
         "build:web": "react-scripts build",
         "build:desktop": "tsc -p electron/tsconfig.json",
-        "start:desktop": "npm run build:desktop && electron build/electron.js",
+        "start:desktop": "npm run build:desktop && electron build/electron/electron.js",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },

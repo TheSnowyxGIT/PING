@@ -1,10 +1,24 @@
-import { Aspect_ , AllAspects} from "./aspect";
-import { FeatureType, Feature_ } from "./feature";
-import { MyNode } from "./node";
+import NodeService from "../../myide/services/nodeService";
+import { F_Project } from "../../../src/shared/F_interfaces";
+import { FeatureType } from "../../../src/shared/ideEnums";
+import { Aspect_ , AllAspects, F_AspectFrom} from "./aspect";
+import { Feature_ } from "./feature";
+import { F_NodeFrom, MyNode } from "./node";
+
+
+
+export function F_ProjectFrom(project: MyProject): F_Project {
+    return {
+        aspects: Array.from(project.getAspects()).map(aspect => F_AspectFrom(aspect)),
+        rootNode: F_NodeFrom(project.getRootNode())
+    }
+}
+
 
 export class MyProject {
 
     private rootNode_: MyNode;
+    private nodeService: NodeService;
     private aspects_: Set<Aspect_>;
 
     /**
@@ -13,6 +27,7 @@ export class MyProject {
     constructor(rNode: MyNode){
         this.rootNode_ = rNode;
         this.aspects_ = new Set();
+        this.nodeService = new NodeService();
     }
 
     /**
@@ -27,6 +42,10 @@ export class MyProject {
      */
     public getAspects(): Set<Aspect_> {
         return this.aspects_;
+    }
+
+    public getNodeService(): NodeService {
+        return this.nodeService;
     }
 
     /**

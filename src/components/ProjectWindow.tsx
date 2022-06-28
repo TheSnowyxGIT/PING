@@ -1,11 +1,10 @@
 import React from "react";
+import { Project } from "../classes/Project";
 import ProjectHeader from "./ProjectHeader";
-import { FilesTree, Tree } from "./Tree";
+import { Tree } from "./Tree";
 
 interface ProjectWindowProps {
-    projectName: string;
-    fileTree: FilesTree;
-
+    project: Project | null;
 }
  
 interface ProjectWindowState {
@@ -17,11 +16,15 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
         super(props);
         this.state = {};
     }
-    render() { 
+    render() {
+
+        if (this.props.project === null)
+            return null;
+
         return (
             <div>
-                <ProjectHeader name={this.props.projectName}/>
-                <Tree node={this.props.fileTree}/>
+                <ProjectHeader name={this.props.project.rootNode.name}/>
+                <Tree node={this.props.project.rootNode}/>
             </div>
         );
     }

@@ -1,5 +1,7 @@
-import { MyNode, NodeType } from "../entity/node"
+import { MyNode } from "../entity/node"
 import * as fs from "fs";
+import { NodeType } from "../../../src/shared/ideEnums";
+import { Report } from "../../../src/shared/report";
 
 export default class NodeService {
 
@@ -77,7 +79,7 @@ export default class NodeService {
     */
     public async create(folder: MyNode, name: string, type: NodeType): Promise<MyNode> {
         if (!folder.isFolder()){
-            throw new Error(`The parent folder need to be a folder`);
+            throw Report.getReport({isSuccess: false, message: "The folder parent need to be a folder"})
         }
         let node = await MyNode.create(name, type, folder);
         return node;

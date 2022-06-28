@@ -1,23 +1,21 @@
-import { Report } from "../utils/report";
-import { FeatureParams, FeatureType } from "./entity/feature";
-import { MyProject } from "./entity/project";
+import { F_Project } from "../../src/shared/F_interfaces";
+import { FeatureType } from "../../src/shared/ideEnums";
+import { Report } from "../../src/shared/report";
+import { FeatureParams } from "./entity/feature";
+import { F_ProjectFrom, MyProject } from "./entity/project";
 import ProjectService from "./services/projectService";
 
 
 class MyIde {
 
     private projectService: ProjectService = new ProjectService();
-    private curr_project: MyProject;
-
-    constructor(){
-        this.openProject("C:\\Users\\Adrien\\Desktop\\testcratesio\\testtttes")
-    }
+    private curr_project: MyProject = null;
 
     public getCurrentProject(){
         return this.curr_project;
     }
 
-    public executeFeature(feature: FeatureType, params: FeatureParams): Promise<Report> {
+    public executeFeature(feature: FeatureType, params: FeatureParams): Promise<Report<unknown>> {
         return this.projectService.execute(this.getCurrentProject(), feature, params);
     }
 
@@ -26,16 +24,15 @@ class MyIde {
      * @param path The Path of the new Project
      * @returns Report
      */
-    public async openProject(path: string): Promise<Report> {
+    public async openProject(path: string): Promise<Report<F_Project>> {
         try {
             let project = await this.projectService.load(path);
-            await project.loadAspect()
             this.curr_project = project;
 
             return Report.getReport({
                 isSuccess: true,
                 message: `Project ${project.getRootNode().getName()} succesfully loaded.`,
-                data: {}
+                data: F_ProjectFrom(project)
             });
 
         } catch (err) {

@@ -2,10 +2,11 @@
  * This file defined all entry points of the mainProcess for the request did by the renderer proccess
  */
 
-import { ipcMain } from "electron";
+import { createFile, openProject } from "./controller";
+import { ipcMain, dialog } from "electron";
+import { FeatureType } from "../src/shared/ideEnums";
 import myide from "./myide/myide";
-import { FeatureType } from "./myide/entity/feature";
-
+import { Report } from "../src/shared/report";
 
 
 export interface ExecFeatureOptions {
@@ -26,14 +27,27 @@ ipcMain.on("execFeature", async (e, options) => {
 })
 
 
+
 export interface OpenProjectOptions {
-    path: string,
     reportChannel: string,
 }
 ipcMain.on("openProject", async (e, options) => {
     let OPoptions = options as OpenProjectOptions;
 
-    let report = await myide.openProject(OPoptions.path);
+    let report = await openProject();
 
-    e.sender.send(OPoptions.reportChannel, report)
+    e.sender.send(OPoptions.reportChannel, report);
+})
+
+
+export interface CreateFileOptions {
+    folderPath: string,
+    name: string,
+}
+ipcMain.on("createFile", async (e, options) => {
+    let CFoptions = options as CreateFileOptions;
+
+    let report = await createFile(CFoptions.folderPath, CFoptions.name);
+
+    e.sender.send("createFile", report);
 })
