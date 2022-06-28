@@ -55,8 +55,6 @@ export function execFeature<T>(feature: FeatureType, params: FeatureFrontParams)
     })
 }
 
-
-
 export async function openProject(): Promise<Report<F_Project>> {
     return new Promise((resolve, reject) => {
         let channel = `openProject`;
