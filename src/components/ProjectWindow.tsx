@@ -22,9 +22,9 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
             return null;
 
         return (
-            <div>
+            <div className="projectWindow">
                 <ProjectHeader name={this.props.project.rootNode.name}/>
-                <Tree node={this.props.project.rootNode}/>
+                <Tree node={this.props.project.rootNode} padding={0}/>
             </div>
         );
     }

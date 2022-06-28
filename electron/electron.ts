@@ -2,9 +2,7 @@ import {app, BrowserWindow } from "electron";
 import * as p from "path";
 import "./listener"
 import "./menu"
-
 import "./myide/myide"
-
 
 function createWindow(){
     const win = new BrowserWindow({

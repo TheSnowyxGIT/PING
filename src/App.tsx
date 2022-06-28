@@ -1,11 +1,8 @@
 import React from 'react';
 import { Ide } from './classes/Ide';
-import { Project } from './classes/Project';
-import { AlertType } from './components/Alert';
 import AlertQueue from './components/AlertQueue';
-import ProjectWindow from './components/ProjectWindow';
-import { F_Node, F_Project } from './shared/F_interfaces';
-import { Report } from './shared/report';
+import CssTest from './pages/cssTests';
+
 
 
 interface AppProps {
@@ -13,32 +10,16 @@ interface AppProps {
 }
  
 interface AppState {
-  ide: Ide;
+
 }
  
 class App extends React.Component<AppProps, AppState> {
 
   constructor(props: AppProps) {
     super(props);
-    this.state = { ide: new Ide() };
+    this.state = { };
 
     
-  }
-
-  setStateIde(ide: Ide){
-    this.setState({ide: ide});
-  }
-
-  onProjectOpened(report: Report<F_Project>) {
-    if (!report.isSuccess){
-      AlertQueue.sendAlert({time: 3000, type: AlertType.ERROR, title: "Open Project", content: report.message || "unknown"})
-    } else {
-      this.setState(state => {
-        if (report.data)
-          state.ide.setProject(Project.of(report.data))
-        return {ide: state.ide}
-      })
-    }
   }
   
   onFileCreated(report: Report<F_Node>) {

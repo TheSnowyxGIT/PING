@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 100vh;
+    .projectWindow {
+        flex: 0 0 auto;
+    }
+    .textEditor {
+        background-color: #0D1117;
+        flex: 1 1 auto;
+    }
+}

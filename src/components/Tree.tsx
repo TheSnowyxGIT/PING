@@ -7,6 +7,7 @@ import { NodeType } from "../shared/ideEnums";
 
 interface TreeProps {
   node: FileNode;
+  padding: number
 }
 
 interface TreeState {
@@ -14,6 +15,8 @@ interface TreeState {
 }
  
 export class Tree extends React.Component<TreeProps, TreeState> {
+  public static padding_width = 10; // px
+
   constructor(props: TreeProps) {
     super(props);
     this.state = {isCollapse : false};
@@ -36,11 +39,15 @@ export class Tree extends React.Component<TreeProps, TreeState> {
   render() {
     return (
       <div className="tree-node">
-        <div className={["info", this.getInfoClass()].join(" ")}>
-          <div className="collapse" onClick={(event) => this.onCollapseClick(event)}>
+        <div 
+          className={["info", this.getInfoClass()].join(" ")} 
+          onClick={(event) => this.onCollapseClick(event)}
+          style={{paddingLeft: `${this.props.padding}px`}}
+        >
+          <div className="collapse">
             <FontAwesomeIcon icon={ this.state.isCollapse ? faChevronDown : faChevronRight}/>
           </div>
-          <FontAwesomeIcon icon={this.props.node.type === NodeType.FOLDER ? faFolder : faFile} />
+          <FontAwesomeIcon className="icon" icon={this.props.node.type === NodeType.FOLDER ? faFolder : faFile} />
           <div className="name">{this.props.node.name}</div>
         </div>
         <div className="children">
@@ -48,7 +55,7 @@ export class Tree extends React.Component<TreeProps, TreeState> {
           this.state.isCollapse ?
           this.props.node.children.map(child => {
             return (
-              <Tree node={child}/>
+              <Tree node={child} padding={this.props.padding + Tree.padding_width}/>
             );})
           : null
         }
