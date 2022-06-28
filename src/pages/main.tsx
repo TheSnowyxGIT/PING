@@ -1,4 +1,5 @@
 import React from "react";
+import { FileNode } from "../classes/FileNode";
 import { Ide } from "../classes/Ide";
 import { Project } from "../classes/Project";
 import { AlertType } from "../components/Alert";
@@ -41,7 +42,7 @@ class Main extends React.Component<MainProps, MainState> {
         } else {
           this.setState(state => {
             if (report.data) {
-              let project = state.ide.getOpenedProject();
+              let project = state.ide.opened_project;
               if (project) {
                 project.addNode(report.data);
               }
@@ -57,7 +58,7 @@ class Main extends React.Component<MainProps, MainState> {
         } else {
           this.setState(state => {
             if (report.data) {
-              let project = state.ide.getOpenedProject();
+              let project = state.ide.opened_project;
               if (project) {
                 project.addNode(report.data);
               }
@@ -77,7 +78,7 @@ class Main extends React.Component<MainProps, MainState> {
         return (
             <div className="container">
                 <div className="projectWindow">
-                    {!this.state.ide.HasProjectOpened ? (<h2>No Project Opened</h2>) : <ProjectWindow project={this.state.ide.getOpenedProject()}/>}
+                    {this.state.ide.opened_project ? <ProjectWindow rootNode={this.state.ide.opened_project.rootNode}/> : (<h2>No Project Opened</h2>) }
                 </div>
                 <div className="textEditor">
                     <Editor filePath="unknown" text="lala" />

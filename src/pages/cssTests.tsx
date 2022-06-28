@@ -33,7 +33,7 @@ class CssTest extends React.Component<CssTestProps, CssTestState> {
         return (
             <div className="container">
                 <div className="projectWindow">
-                    <ProjectWindow project={this.project}/>
+                    <ProjectWindow rootNode={this.project.rootNode}/>
                 </div>
                 <div className="textEditor">
                     <Editor filePath="unknown" text="lala" />

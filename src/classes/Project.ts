@@ -21,7 +21,9 @@ export class Project implements F_Project {
       let parent = this.rootNode.getChild(path);
       if (parent == null)
         return false;
-      parent.children.push(FileNode.of(node));
+      let newNode = FileNode.of(node);
+      newNode.parent = parent;
+      parent.children.push(newNode);
       return true;
     }
 }

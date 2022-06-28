@@ -9,6 +9,7 @@ import { resolve } from "node:path/win32";
 
 interface TreeProps {
   node: FileNode;
+  selectedNode: FileNode | null
   padding: number;
   onSelected: (node: FileNode) => void;
 }
@@ -18,12 +19,12 @@ interface TreeState {
   isWriting: boolean;
   writingValue: string
   writingCallback: (name: string) => void;
-  elRefs: React.RefObject<Tree>[]
 }
  
 export class Tree extends React.Component<TreeProps, TreeState> {
   public static padding_width = 10; // px
   public static collapse_width = 30; // px
+  public refsArray: Tree[];
 
   constructor(props: TreeProps) {
     super(props);
@@ -32,23 +33,10 @@ export class Tree extends React.Component<TreeProps, TreeState> {
       isWriting : false,
       writingValue: "",
       writingCallback: () => {},
-      elRefs: Array(this.props.node.children.length).fill(undefined).map(() => React.createRef())
     }
-  }
 
-  componentWillReceiveProps(prevProps: Readonly<TreeProps>){
-      if (prevProps.node.children.length !== this.props.node.children.length){
-        this.setState(state => {
-          return {
-            elRefs: Array(this.props.node.children.length).fill(undefined).map((_, i) => state.elRefs[i] || React.createRef())
-          }
-        })
-      }
-      if (this.props.node.name === "src")
-        console.log(prevProps.node.children.length, this.props.node.children.length)
+    this.refsArray = [];
   }
-
-  
 
   private getInfoClass(): string {
     if (this.props.node.type === NodeType.FOLDER)
@@ -83,10 +71,9 @@ export class Tree extends React.Component<TreeProps, TreeState> {
         this.setState({isCollapse: true, isWriting: true, writingValue: "", writingCallback: callback});
       } else {
         let promises = [];
-        for (let childRef of this.state.elRefs){
-          if (childRef.current){
-            promises.push(childRef.current.getInputNewNode(node))
-          }
+        console.log(this.props.node.name, this.refsArray.length)
+        for (let childRef of this.refsArray){
+            promises.push(childRef.getInputNewNode(node))
         }
         const results = await Promise.all(promises);
         const result = results.reduce((acc, cur) => cur !== "" ? cur : "", "");
@@ -108,12 +95,14 @@ export class Tree extends React.Component<TreeProps, TreeState> {
   }
   
   render() {
+    const isSelected = this.props.selectedNode && this.props.selectedNode.relativePath === this.props.node.relativePath;
+
     return (
       <div className="tree-node">
         <div 
-          className={["info", this.getInfoClass()].join(" ")} 
+          className={["info", this.getInfoClass(), isSelected ? "selected" : ""].join(" ")} 
           onClick={(event) => this.onCollapseClick(event)}
-          style={{marginLeft: `${this.props.padding}px`}}
+          style={{paddingLeft: `${this.props.padding}px`}}
         >
           <div className="collapse" style={{flexBasis: Tree.collapse_width + "px"}}>
             <FontAwesomeIcon icon={ this.state.isCollapse ? faChevronDown : faChevronRight}/>
@@ -139,10 +128,11 @@ export class Tree extends React.Component<TreeProps, TreeState> {
             return (
               <Tree 
                 key={i}
-                ref={this.state.elRefs[i]}
+                ref={ref => ref && (this.refsArray[i] = ref)}
                 node={child}
                 padding={this.props.padding + Tree.padding_width}
                 onSelected={node => this.props.onSelected(node)}
+                selectedNode={this.props.selectedNode}
               />
             );})
           : null

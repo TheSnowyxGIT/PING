@@ -6,7 +6,7 @@ import ProjectHeader from "./ProjectHeader";
 import { Tree } from "./Tree";
 
 interface ProjectWindowProps {
-    project: Project | null;
+    rootNode: FileNode;
 }
  
 interface ProjectWindowState {
@@ -27,13 +27,14 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
     }
 
     async onNewFileClicked(){
-        if (this.rootNode.current && this.props.project){
-            let selectedFolderNode = this.state.selectNode || this.props.project.rootNode;
+        if (this.rootNode.current){
+            let selectedFolderNode = this.state.selectNode || this.props.rootNode;
             if (selectedFolderNode.type !== NodeType.FOLDER){
                 if (selectedFolderNode.parent){
                     selectedFolderNode = selectedFolderNode.parent;
                 }
             }
+            console.log(selectedFolderNode)
             let fileName = await this.rootNode.current.getInputNewNode(selectedFolderNode)
             if (fileName !== ""){
                 window.electron.createFile(selectedFolderNode.relativePath, fileName);
@@ -42,20 +43,18 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
     }
 
     render() {
-        if (this.props.project === null)
-            return null;
-
         return (
             <div className="projectWindow">
                 <ProjectHeader 
-                    name = {this.props.project.rootNode.name}
+                    name = {this.props.rootNode.name}
                     onNewFileClick = {() => this.onNewFileClicked()}
                 />
                 <Tree 
                     ref={this.rootNode}
-                    node={this.props.project.rootNode}
+                    node={this.props.rootNode}
                     padding={0}
                     onSelected={node => this.onSelected(node)}
+                    selectedNode={this.state.selectNode}
                 />
             </div>
         );
