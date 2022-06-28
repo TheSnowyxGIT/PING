@@ -18,31 +18,13 @@ const Editor = (props: EditorProps) => {
     const [fontSize, setFontSize] = useState(14);
     const [textHasChanged, setTextHasChanged] = useState(false);
 
-
-    function saveFile(){
-        if (textHasChanged){
-            let report = window.electron.saveFile({
-                data: new TextEncoder().encode(value),
-                path: props.filePath
-            })
-            console.log("SaveFile report", report)
-        }
-    }
-
     function onChange(value: string){
         setValue(value);
         setTextHasChanged(true);
     }
 
-    function handleKeyDown(event: KeyboardEvent<HTMLDivElement>){
-        if((event.ctrlKey || event.metaKey) && event.code === 'KeyS') {
-            event.preventDefault();
-            saveFile();
-        }
-    }
-
     return (
-        <div onKeyDown={handleKeyDown} >
+        <div>
             <AceEditor
                 placeholder=""
                 defaultValue={props.text}
