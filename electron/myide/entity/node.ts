@@ -45,7 +45,7 @@ export class MyNode {
                     if (stat.isDirectory())
                         type = NodeType.FOLDER;
                     let name = p.basename(path);
-                    let relativePath = name;
+                    let relativePath = "";
                     if (parent !== null)
                         relativePath = p.join(parent.getRelativePath(), name);
                     let node = new MyNode(name, path, relativePath, type, parent);
@@ -80,7 +80,7 @@ export class MyNode {
             fs.access(path, fs.constants.F_OK, err => {
                 if (err){
                     let name = p.basename(path)
-                    let node = new MyNode(name, path, name, type, null);
+                    let node = new MyNode(name, path, "", type, null);
                     node.createFsObj()
                     return resolve(node);
                 }
@@ -102,7 +102,7 @@ export class MyNode {
             let path = p.join(parent.getPath(), name);
             fs.access(path, fs.constants.F_OK, async err => {
                 if (err){
-                    let relativePath = name;
+                    let relativePath = "";
                     if (parent !== null)
                         relativePath = p.join(parent.getRelativePath(), name);
                     let node = new MyNode(name, path, relativePath, type, parent);
@@ -289,6 +289,7 @@ export class MyNode {
      */
     public findChildRec(path: string): MyNode | null {
         let fileName = path.split(p.sep)[0];
+        console.log(path.split(p.sep))
         for (let child of this.getChildren()){
             if (child.getName() === fileName){
                 if (path.split(p.sep).length === 1){
