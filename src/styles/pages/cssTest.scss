@@ -3,11 +3,12 @@
     flex-direction: row;
     flex-wrap: nowrap;
     height: 100vh;
-    .projectWindow {
+    >.left {
         flex: 0 0 auto;
     }
-    .textEditor {
-        background-color: #0D1117;
+    >.right {
         flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
     }
 }

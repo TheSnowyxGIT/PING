@@ -1,5 +1,7 @@
 $error_color: rgb(255, 105, 105);
 $info_color: #7f0;
+$dark1: #010409;
+$white1: #C9D1D9;
 :root {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, monospace;
 }
@@ -10,4 +12,8 @@ body {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+}
+
+* {
+    box-sizing: border-box;
 }

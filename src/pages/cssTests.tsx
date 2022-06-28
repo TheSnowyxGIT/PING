@@ -2,6 +2,7 @@ import React from "react";
 import { FileNode } from "../classes/FileNode";
 import { Project } from "../classes/Project";
 import Editor from "../components/Editor";
+import FilesHeader from "../components/FilesHeader/FilesHeader";
 import ProjectWindow from "../components/ProjectWindow";
 import { NodeType } from "../shared/ideEnums";
 
@@ -34,10 +35,11 @@ class CssTest extends React.Component<CssTestProps, CssTestState> {
     render() { 
         return (
             <div className="container">
-                <div className="projectWindow">
+                <div className="left">
                     <ProjectWindow project={this.project}/>
                 </div>
-                <div className="textEditor">
+                <div className="right">
+                    <FilesHeader openedFiles={[this.project.rootNode.children[0]]}/>
                     <Editor filePath="unknown" text="lala" />
                 </div>
             </div>

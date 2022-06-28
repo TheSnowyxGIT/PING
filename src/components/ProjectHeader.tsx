@@ -4,13 +4,13 @@ import {faFolderPlus, faFileCirclePlus} from "@fortawesome/free-solid-svg-icons"
 import { convertTypeAcquisitionFromJson } from "typescript";
 
 interface ProjectHeaderProps {
-    name:String;
+    name: String;
 }
  
 interface ProjectHeaderState {
     
 }
- 
+  
 class ProjectHeader extends React.Component<ProjectHeaderProps, ProjectHeaderState> {
     constructor(props: ProjectHeaderProps) {
         super(props);
