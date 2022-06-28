@@ -4,7 +4,8 @@ import {faFolderPlus, faFileCirclePlus} from "@fortawesome/free-solid-svg-icons"
 import { convertTypeAcquisitionFromJson } from "typescript";
 
 interface ProjectHeaderProps {
-    name:String;
+    name: String;
+    onNewFileClick: () => void;
 }
  
 interface ProjectHeaderState {
@@ -17,10 +18,6 @@ class ProjectHeader extends React.Component<ProjectHeaderProps, ProjectHeaderSta
         this.state = {};
     }
 
-    private addFile(): void{
-        console.log("addFile");
-    };
-
     private addFolder(): void{
         console.log("addFolder");
     };
@@ -30,7 +27,7 @@ class ProjectHeader extends React.Component<ProjectHeaderProps, ProjectHeaderSta
             <div className="project-header">
                 <div className="project-name">{this.props.name}</div>
             <div className="buttons">
-                <div className="add-file" onClick={() => this.addFile()}>
+                <div className="add-file" onClick={() => this.props.onNewFileClick()}>
                    <FontAwesomeIcon icon={faFileCirclePlus}/>
                 </div>
                 <div className="add-folder" onClick={() => this.addFolder()}>

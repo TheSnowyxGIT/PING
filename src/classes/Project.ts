@@ -18,7 +18,6 @@ export class Project implements F_Project {
     public addNode(node: F_Node): boolean {
       let path = node.relativePath.split(window.libraries.path.sep);
       path.pop();
-      path.shift();
       let parent = this.rootNode.getChild(path);
       if (parent == null)
         return false;

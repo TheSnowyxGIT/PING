@@ -11,6 +11,7 @@ export class FileNode implements F_Node{
   public type: NodeType;
   public children: FileNode[];
   public name: string;
+  public parent: FileNode | null;
 
   public static of(node: F_Node): FileNode{
     return new FileNode(node.path, node.relativePath, node.name, node.type, node.children.map(child => FileNode.of(child)));
@@ -22,7 +23,15 @@ export class FileNode implements F_Node{
     this.name = name;
     this.type = type;
     this.children = children;
+    this.parent = null;
+    this.loadParent(this.parent);
+  }
 
+  private loadParent(parent: FileNode | null){
+    this.parent = parent;
+    for (let child of this.children){
+      child.loadParent(this);
+    }
   }
 
   public getChild(path: string[]): FileNode | null{
