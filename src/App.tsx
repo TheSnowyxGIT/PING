@@ -1,7 +1,6 @@
 import React from 'react';
 import AlertQueue from './components/AlertQueue';
 import CssTest from './pages/cssTests';
-import Main from './pages/main';
 
 
 interface AppProps {
@@ -20,7 +19,7 @@ class App extends React.Component<AppProps, AppState> {
 
     
   }
-  
+
   render() { 
     return (
       <div className="App">

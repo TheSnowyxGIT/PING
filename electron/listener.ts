@@ -2,7 +2,7 @@
  * This file defined all entry points of the mainProcess for the request did by the renderer proccess
  */
 
-import { createFile, openProject } from "./controller";
+import { createFile, createFolder, openProject } from "./controller";
 import { ipcMain, dialog } from "electron";
 import { FeatureType } from "../src/shared/ideEnums";
 import myide from "./myide/myide";
@@ -50,4 +50,17 @@ ipcMain.on("createFile", async (e, options) => {
     let report = await createFile(CFoptions.folderPath, CFoptions.name);
 
     e.sender.send("createFile", report);
+})
+
+
+export interface CreateFolderOptions {
+    folderPath: string,
+    name: string,
+}
+ipcMain.on("createFolder", async (e, options) => {
+    let CFoptions = options as CreateFolderOptions;
+
+    let report = await createFolder(CFoptions.folderPath, CFoptions.name);
+
+    e.sender.send("createFolder", report);
 })

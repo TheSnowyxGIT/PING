@@ -32,6 +32,7 @@ class Main extends React.Component<MainProps, MainState> {
         }
       }
       
+
       onFileCreated(report: Report<F_Node>) {
         if (!report.isSuccess){
           AlertQueue.sendAlert({time: 3000, type: AlertType.ERROR, title: "Create new file", content: report.message || "unknown"})
@@ -48,9 +49,26 @@ class Main extends React.Component<MainProps, MainState> {
         }
       }
     
+      onFolderCreated(report: Report<F_Node>) {
+        if (!report.isSuccess){
+          AlertQueue.sendAlert({time: 3000, type: AlertType.ERROR, title: "Create new folder", content: report.message || "unknown"})
+        } else {
+          this.setState(state => {
+            if (report.data) {
+              let project = state.ide.getOpenedProject();
+              if (project) {
+                project.addNode(report.data);
+              }
+            }
+            return {ide: state.ide}
+          })
+        }
+      }
+    
       componentDidMount(){
         window.electron.onProjectOpened((report) => this.onProjectOpened(report));
         window.electron.onFileCreated((report) => this.onFileCreated(report));
+        window.electron.onFolderCreated((report) => this.onFolderCreated(report))
       }
     
     render() { 
