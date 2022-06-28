@@ -1,0 +1,12 @@
+.filesHeader {
+    width: 100%;
+    color: $white1;
+    .files {
+        position: relative;
+        display: flex;
+        justify-content: flex-start;
+        overflow: hidden;
+        width: 100%;
+    }
+    background: $dark1;
+}

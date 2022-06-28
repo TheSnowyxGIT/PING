@@ -1,9 +1,9 @@
 .projectWindow {
     height: 100%;
     min-width: 250px;
-    background-color: #010409;
+    background-color: $dark1;
     box-sizing: border-box;
     border: 1px solid #30363D;
-    color: #C9D1D9;
+    color: $white1;
     overflow: hidden;
 }

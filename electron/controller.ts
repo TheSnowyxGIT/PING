@@ -69,7 +69,6 @@ export async function createFile(folderPath: string, name: string): Promise<Repo
     }
 }
 
-
 export async function createFolder(folderPath: string, name: string): Promise<Report<F_Node>> {
     let project = myide.getCurrentProject();
 
