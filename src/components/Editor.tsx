@@ -4,7 +4,7 @@ import { Ace } from "ace-builds";
 
 import "ace-builds/src-noconflict/ext-searchbox";
 import "ace-builds/src-noconflict/mode-rust"
-import "ace-builds/src-noconflict/theme-monokai"
+import "ace-builds/src-noconflict/theme-twilight"
 import "ace-builds/src-noconflict/ext-language_tools"
 
 interface EditorProps {
@@ -15,7 +15,7 @@ interface EditorProps {
 const Editor = (props: EditorProps) => {
 
     const [value, setValue] = useState(props.text);
-    const [fontSize, setFontSize] = useState(14);
+    const [fontSize, setFontSize] = useState(17);
     const [textHasChanged, setTextHasChanged] = useState(false);
 
     function onChange(value: string){
@@ -24,19 +24,21 @@ const Editor = (props: EditorProps) => {
     }
 
     return (
-        <div>
+        <div style={{height: "100%"}}>
             <AceEditor
                 placeholder=""
                 defaultValue={props.text}
                 mode="rust"
-                theme="monokai"
+                theme="twilight"
                 name="Editor"
                 onChange={onChange}
                 value={value}
                 fontSize={fontSize}
-                showPrintMargin={true}
+                showPrintMargin={false}
                 showGutter={true}
                 highlightActiveLine={true}
+                width="100%"
+                height="100%"
                 setOptions={{
                     useWorker: false,
                     enableBasicAutocompletion: false,
