@@ -1,13 +1,19 @@
-.project-header{
+.project-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
-    .buttons{
+    padding: 5px;
+    .buttons {
+        margin-left: 20px;
         display: flex;
         flex-direction: row;
-    .add-file{
-        padding-right: 5px;
-    }
+        >div {
+            cursor: pointer;
+            margin-left: 10px;
+            border-radius: 20%;
+            &:hover {
+                background: #fff2
+            }
+        }
     }
 }

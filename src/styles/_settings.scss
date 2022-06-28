@@ -3,3 +3,11 @@ $info_color: #7f0;
 :root {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, monospace;
 }
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
