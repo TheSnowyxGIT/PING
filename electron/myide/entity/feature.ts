@@ -1,12 +1,12 @@
-import { Project_ } from "./project";
+import { FeatureType } from "../../../src/shared/ideEnums";
+import { Report } from "../../../src/shared/report";
+import { MyProject} from "./project";
 
-export enum FeatureType {
-    CLEANUP
+export interface FeatureParams {
+    errCallback: (chunk: string) => void,
+    outCallback: (chunk: string) => void,
+    others?: any
 };
-
-export interface ExecutionReport {
-    isSuccess(): boolean;
-}
 
 export interface Feature_ {
     /**
@@ -14,7 +14,7 @@ export interface Feature_ {
      * @param params  Parameters given to the features.
      * @return {@link ExecutionReport}
      */
-    execute(project: Project_, ...params: any[]): ExecutionReport | null;
+    execute(project: MyProject, params: FeatureParams): Promise<Report<unknown>>;
 
     /**
      * @return The type of the Feature.

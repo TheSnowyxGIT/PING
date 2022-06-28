@@ -1,17 +1,52 @@
-import { Aspect_ , AllAspects} from "./aspect";
-import { FeatureType, Feature_ } from "./feature";
-import { MyNode } from "./node";
+import NodeService from "../../myide/services/nodeService";
+import { F_Project } from "../../../src/shared/F_interfaces";
+import { FeatureType } from "../../../src/shared/ideEnums";
+import { Aspect_ , AllAspects, F_AspectFrom} from "./aspect";
+import { Feature_ } from "./feature";
+import { F_NodeFrom, MyNode } from "./node";
 
-export interface Project_ {
+
+
+export function F_ProjectFrom(project: MyProject): F_Project {
+    return {
+        aspects: Array.from(project.getAspects()).map(aspect => F_AspectFrom(aspect)),
+        rootNode: F_NodeFrom(project.getRootNode())
+    }
+}
+
+
+export class MyProject {
+
+    private rootNode_: MyNode;
+    private nodeService: NodeService;
+    private aspects_: Set<Aspect_>;
+
+    /**
+     * Constructor
+    */
+    constructor(rNode: MyNode){
+        this.rootNode_ = rNode;
+        this.aspects_ = new Set();
+        this.nodeService = new NodeService();
+    }
+
     /**
      * @return The root node of the project.
     */
-    getRootNode(): MyNode;
+    public getRootNode(): MyNode {
+        return this.rootNode_;
+    }
 
     /**
      * @return The aspects of the project.
      */
-    getAspects(): Set<Aspect_>;
+    public getAspects(): Set<Aspect_> {
+        return this.aspects_;
+    }
+
+    public getNodeService(): NodeService {
+        return this.nodeService;
+    }
 
     /**
      * Get an optional feature of the project depending
@@ -21,36 +56,6 @@ export interface Project_ {
      * @param featureType Type of the feature to retrieve.
      * @return An optional feature of the project.
      */
-    getFeature(featureType: FeatureType): Feature_ | null;
-
-    /**
-     * @return The list of the project features.
-     */
-    getFeatures(): Feature_[];
-}
-
-
-export class MyProject implements Project_ {
-
-    private rootNode_: MyNode;
-    private aspects_: Set<Aspect_>;
-
-    /**
-     * Constructor
-    */
-    constructor(rNode: MyNode){
-        this.rootNode_ = rNode;
-        this.aspects_ = new Set();
-    }
-
-    public getRootNode(): MyNode {
-        return this.rootNode_;
-    }
-
-    public getAspects(): Set<Aspect_> {
-        return this.aspects_;
-    }
-
     public getFeature(featureType: FeatureType): Feature_ | null {
         let all_features = this.getFeatures();
         let feature: Feature_ | null = null;
@@ -63,19 +68,23 @@ export class MyProject implements Project_ {
         return feature;
     }
 
+    /**
+     * @return The list of the project features.
+     */
     public getFeatures(): Feature_[] {
         let aspects = this.getAspects();
         let all_features: Feature_[] = [];
         for (let aspect of Array.from(aspects.values())){
-            all_features.concat(aspect.getFeatureList());
+            all_features = all_features.concat(aspect.getFeatureList());
         }
         return all_features;
     }
 
-    public loadAspect(): void {
+    public async loadAspect(): Promise<void> {
         this.aspects_ = new Set();
         for (let aspect of AllAspects){
-            if (aspect.checkActive(this)){
+            let actived = await aspect.checkActive(this);
+            if (actived){
                 this.aspects_.add(aspect);
             }
         }
