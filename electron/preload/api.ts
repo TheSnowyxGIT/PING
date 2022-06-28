@@ -86,27 +86,18 @@ export function onProjectOpened(listener: (report: Report<F_Project>) => void){
 }
 
 
+export function createFile(folderPath: string, name: string): void {
+    let channel = `createFile`;
 
-export function createFile(folderPath: string, name: string): Promise<Report<F_Node>> {
-    return new Promise((resolve, reject) => {
-        let channel = `createFile`;
-        let execId = Math.floor(Math.random() * 1000000000);
-    
-         // Channel of the response
-         let reportChannel = channel + ":report" + execId;
-    
-         let options: CreateFileOptions = {
-             reportChannel: reportChannel,
-             folderPath: folderPath,
-             name: name
-         }
-    
-        function reportHandler(event: Electron.IpcRendererEvent, report: Report<F_Node>){
-            ipcRenderer.removeListener(reportChannel, reportHandler);
-            resolve(report);
-        }
-    
-        ipcRenderer.send(channel, options);
-        ipcRenderer.on(reportChannel, reportHandler)
+    let options: CreateFileOptions = {
+         folderPath: folderPath,
+         name: name
+     }
+    ipcRenderer.send(channel, options);
+}
+
+export function onFileCreated(listener: (report: Report<F_Node>) => void){
+    ipcRenderer.on("createFile", (_, report: Report<F_Node>) => {
+        listener(report);
     })
 }

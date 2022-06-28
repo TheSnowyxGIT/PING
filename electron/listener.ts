@@ -43,12 +43,11 @@ ipcMain.on("openProject", async (e, options) => {
 export interface CreateFileOptions {
     folderPath: string,
     name: string,
-    reportChannel: string,
 }
 ipcMain.on("createFile", async (e, options) => {
     let CFoptions = options as CreateFileOptions;
 
     let report = await createFile(CFoptions.folderPath, CFoptions.name);
 
-    e.sender.send(CFoptions.reportChannel, report);
+    e.sender.send("createFile", report);
 })

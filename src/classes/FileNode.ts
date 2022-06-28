@@ -1,4 +1,4 @@
-import { isNullishCoalesce } from "typescript";
+import { isNullishCoalesce, textChangeRangeIsUnchanged } from "typescript";
 import { Tree } from "../components/Tree";
 import { F_Node } from "../shared/F_interfaces";
 import { NodeType } from "../shared/ideEnums";
@@ -13,7 +13,7 @@ export class FileNode implements F_Node{
   public name: string;
 
   public static of(node: F_Node): FileNode{
-    return node as FileNode;
+    return new FileNode(node.path, node.relativePath, node.name, node.type, node.children.map(child => FileNode.of(child)));
   }
 
   constructor(path: string, relativePath: string, name: string, type: NodeType, children: FileNode[]) {
@@ -35,22 +35,11 @@ export class FileNode implements F_Node{
         else
         {
           path.shift();
-          return this.getChild(path);
+          return child.getChild(path);
         }
       }
     }
     return null;
-  }
-  
-  // add node to tree
-  public addNode(node: F_Node): boolean {
-    let path = node.relativePath.split(window.libraries.path.sep);
-    path.pop();
-    let parent = this.getChild(path);
-    if (parent == null)
-      return false;
-    parent.children.push(FileNode.of(node));
-    return true;
   }
 
 }

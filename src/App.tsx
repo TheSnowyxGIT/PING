@@ -4,7 +4,7 @@ import { Project } from './classes/Project';
 import { AlertType } from './components/Alert';
 import AlertQueue from './components/AlertQueue';
 import ProjectWindow from './components/ProjectWindow';
-import { F_Project } from './shared/F_interfaces';
+import { F_Node, F_Project } from './shared/F_interfaces';
 import { Report } from './shared/report';
 
 
@@ -40,18 +40,33 @@ class App extends React.Component<AppProps, AppState> {
       })
     }
   }
+  
+  onFileCreated(report: Report<F_Node>) {
+    if (!report.isSuccess){
+      AlertQueue.sendAlert({time: 3000, type: AlertType.ERROR, title: "Create new file", content: report.message || "unknown"})
+    } else {
+      this.setState(state => {
+        if (report.data) {
+          let project = state.ide.getOpenedProject();
+          if (project) {
+            project.addNode(report.data);
+          }
+        }
+        return {ide: state.ide}
+      })
+    }
+  }
 
   componentDidMount(){
-    window.electron.onProjectOpened((report) => this.onProjectOpened(report))
+    window.electron.onProjectOpened((report) => this.onProjectOpened(report));
+    window.electron.onFileCreated((report) => this.onFileCreated(report));
   }
 
   render() { 
     return (
       <div className="App">
         <button onClick={() => {
-          window.electron.createFile("src", "romain.cpp").then(report => {
-            console.log(report)
-          })
+          window.electron.createFile("src", "romain.cpp");
         }}>Create basic file</button>
         <p>{this.state.ide.getOpenedProject()?.rootNode.path}</p>
         <ProjectWindow project={this.state.ide.getOpenedProject()} />

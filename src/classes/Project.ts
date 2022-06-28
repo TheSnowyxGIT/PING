@@ -6,11 +6,23 @@ export class Project implements F_Project {
     public aspects: F_Aspect[];
 
     public static of(project: F_Project): Project{
-        return project as Project
+        return new Project(FileNode.of(project.rootNode), project.aspects);
     }
 
     constructor(rootNode: FileNode, aspects: F_Aspect[]){
         this.aspects = aspects;
         this.rootNode = rootNode;
+    }
+
+    // add node to tree
+    public addNode(node: F_Node): boolean {
+      let path = node.relativePath.split(window.libraries.path.sep);
+      path.pop();
+      path.shift();
+      let parent = this.rootNode.getChild(path);
+      if (parent == null)
+        return false;
+      parent.children.push(FileNode.of(node));
+      return true;
     }
 }
