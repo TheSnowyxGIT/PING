@@ -1,8 +1,15 @@
 import { F_Aspect, F_Node, F_Project } from "../shared/F_interfaces";
+import { NodeType } from "../shared/ideEnums";
+import { FileEdit } from "./FileEdit";
 import { FileNode } from "./FileNode";
 
 export class Project implements F_Project {
     public rootNode: FileNode;
+    public selectedNode: FileNode | null = null;
+    public selectedFile: FileNode | null = null;
+
+    public filesOpened: FileEdit[] = [];
+
     public aspects: F_Aspect[];
 
     public static of(project: F_Project): Project{
@@ -12,6 +19,50 @@ export class Project implements F_Project {
     constructor(rootNode: FileNode, aspects: F_Aspect[]){
         this.aspects = aspects;
         this.rootNode = rootNode;
+    }
+
+    public setSelectedNode(node: FileNode | null){
+      this.selectedNode = node;
+      if (node && node.type === NodeType.FILE)
+        this.selectedFile = node;
+      if (!node)
+        this.selectedFile = null;
+    }
+
+    public openFile(node: FileNode) {
+        if (node.type !== NodeType.FILE)
+          return;
+        // check alredy open
+        if (!this.filesOpened.some(files => files.file.equals(node))){
+          // Not opened
+          let content = "basic content"
+          let fileEdit = new FileEdit(node, content);
+          this.filesOpened.push(fileEdit);
+        }
+    }
+
+    public closeFile(node: FileNode) {
+      // check file opened
+      let index = 0;
+      for (let fileEdit of this.filesOpened){
+        if (fileEdit.file.equals(node)){
+          break;
+        }
+        index += 1;
+      }
+      if (index < this.filesOpened.length){
+        this.filesOpened.splice(index, 1);
+        if (this.selectedFile){
+          if (this.selectedFile.equals(node)){
+            let node: FileNode | null = null;
+            if (this.filesOpened.length > 0){
+              index = index - 1 < 0 ? 0 : index - 1;
+              node = this.filesOpened[index].file;
+            }
+            this.setSelectedNode(node);
+          }
+        }
+      }
     }
 
     // add node to tree

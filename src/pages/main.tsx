@@ -4,7 +4,9 @@ import { Ide } from "../classes/Ide";
 import { Project } from "../classes/Project";
 import { AlertType } from "../components/Alert";
 import AlertQueue from "../components/AlertQueue";
-import Editor from "../components/Editor";
+import Editor from "../components/EditorContainer/Editor";
+import EditorContainer from "../components/EditorContainer/EditorContainer";
+import FilesHeader from "../components/FilesHeader/FilesHeader";
 import ProjectWindow from "../components/ProjectWindow";
 import { F_Node, F_Project } from "../shared/F_interfaces";
 import { Report } from "../shared/report";
@@ -67,6 +69,30 @@ class Main extends React.Component<MainProps, MainState> {
           })
         }
       }
+
+      selectNode(node: FileNode | null) {
+        this.setState(state => {
+          if (state.ide.opened_project){
+             state.ide.opened_project.setSelectedNode(node);
+             node && state.ide.opened_project.openFile(node);
+          }
+          return {ide: state.ide}
+        })
+      }
+
+      /**
+       * Close the node by removing from the opened files
+       */
+      closeNode(node: FileNode) {
+        this.setState(state => {
+          if (state.ide.opened_project){
+              state.ide.opened_project.closeFile(node);
+          }
+          return {ide: state.ide}
+        })
+      }
+
+
     
       componentDidMount(){
         window.electron.onProjectOpened((report) => this.onProjectOpened(report));
@@ -75,15 +101,31 @@ class Main extends React.Component<MainProps, MainState> {
       }
     
     render() { 
+        const projectOpened = this.state.ide.opened_project;
+        const selectedNode = projectOpened?.selectedNode;
+        const selectedFile = projectOpened?.selectedFile ?  projectOpened.selectedFile : null;
+        let openFiles: FileNode[] = []
+        selectedFile && (openFiles = [selectedFile])
+
         return (
-            <div className="container">
-                <div className="projectWindow">
-                    {this.state.ide.opened_project ? <ProjectWindow rootNode={this.state.ide.opened_project.rootNode}/> : (<h2>No Project Opened</h2>) }
-                </div>
-                <div className="textEditor">
-                    <Editor filePath="unknown" text="lala" />
-                </div>
+          <div className="container">
+            <div className="left">
+                {projectOpened ? (<ProjectWindow 
+                        rootNode={projectOpened.rootNode}
+                        selectedNode={projectOpened.selectedNode}
+                        onSelected={(node) => this.selectNode(node)}
+                />) : (<>No Project</>)}
             </div>
+            <div className="right">
+                <EditorContainer 
+                  files={projectOpened ? projectOpened.filesOpened : []}
+                  selectedFile={selectedFile}
+                  onBoxClose={node => this.closeNode(node)}
+                  onBoxSelecte={(node) => this.selectNode(node)}
+                  onContentChange={() => {}}
+                />
+            </div>
+        </div>
         );
     }
 }

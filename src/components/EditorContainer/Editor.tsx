@@ -6,34 +6,38 @@ import "ace-builds/src-noconflict/ext-searchbox";
 import "ace-builds/src-noconflict/mode-rust"
 import "ace-builds/src-noconflict/theme-twilight"
 import "ace-builds/src-noconflict/ext-language_tools"
-
+import { FileEdit } from "../../classes/FileEdit";
+import React from "react";
+ 
 interface EditorProps {
-    text: string,
-    filePath: string
+    fileEdit: FileEdit
+    onChange: (value: string) => void
 }
+ 
+interface EditorState {
+    
+}
+ 
+class Editor extends React.Component<EditorProps, EditorState> {
+    public static fontSize: number = 17;
 
-const Editor = (props: EditorProps) => {
-
-    const [value, setValue] = useState(props.text);
-    const [fontSize, setFontSize] = useState(17);
-    const [textHasChanged, setTextHasChanged] = useState(false);
-
-    function onChange(value: string){
-        setValue(value);
-        setTextHasChanged(true);
+    constructor(props: EditorProps) {
+        super(props);
+        this.state = { };
     }
 
-    return (
-        <div style={{height: "100%"}}>
+    render() { 
+        return (
+            <div style={{height: "100%"}}>
             <AceEditor
                 placeholder=""
-                defaultValue={props.text}
+                defaultValue={this.props.fileEdit.content}
                 mode="rust"
                 theme="twilight"
                 name="Editor"
-                onChange={onChange}
-                value={value}
-                fontSize={fontSize}
+                onChange={data => this.props.onChange(data)}
+                value={this.props.fileEdit.content}
+                fontSize={Editor.fontSize}
                 showPrintMargin={false}
                 showGutter={true}
                 highlightActiveLine={true}
@@ -49,8 +53,8 @@ const Editor = (props: EditorProps) => {
                 }}
             />
         </div>
-    );
+        );
+    }
 }
-
-
+ 
 export default Editor;

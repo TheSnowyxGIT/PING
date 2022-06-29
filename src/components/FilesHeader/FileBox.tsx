@@ -7,8 +7,9 @@ import { FileNode } from "../../classes/FileNode";
 interface FileBoxProps {
     name: string,
     icon?: IconProp,
-    onClose?: () => void,
-    onClick?: () => void,
+    onClose: () => void,
+    onClick: () => void,
+    active?: boolean,
 }
  
 interface FileBoxState {
@@ -23,13 +24,15 @@ class FileBox extends React.Component<FileBoxProps, FileBoxState> {
 
     onClicked(event: React.MouseEvent){
         if (!(event.target as Element).classList.contains("close")){
-            this.props.onClick && this.props.onClick();
+            this.props.onClick();
+        } else {
+            this.props.onClose();
         }
     }
 
     render() { 
         return (
-            <div className="FileBox" onClick={event => this.onClicked(event)}>
+            <div className={["FileBox", this.props.active ? "active" : ""].join(" ")} onClick={event => this.onClicked(event)}>
                 <div className="icon">
                    <FontAwesomeIcon icon={this.props.icon || faDeaf}/> 
                 </div>
@@ -37,7 +40,7 @@ class FileBox extends React.Component<FileBoxProps, FileBoxState> {
                     <div className="name">{this.props.name}</div>
                 </div>
                 <div className="close">
-                    <FontAwesomeIcon icon={faXmark} onClick={() => this.props.onClose && this.props.onClose() }/>
+                    <FontAwesomeIcon icon={faXmark}/>
                 </div>
             </div>
         );

@@ -47,7 +47,10 @@ export class Tree extends React.Component<TreeProps, TreeState> {
   }
 
   private onCollapseClick(event: MouseEvent) {
-      this.props.onSelected(this.props.node)
+      // Call callback if there is not selected Node or the selected node is not this node
+      if (!this.props.selectedNode || !this.props.selectedNode.equals(this.props.node))
+        this.props.onSelected(this.props.node)
+      // Update Collapse of the node
       this.setState({
         isCollapse: !this.state.isCollapse
       })
@@ -71,7 +74,6 @@ export class Tree extends React.Component<TreeProps, TreeState> {
         this.setState({isCollapse: true, isWriting: true, writingValue: "", writingCallback: callback});
       } else {
         let promises = [];
-        console.log(this.props.node.name, this.refsArray.length)
         for (let childRef of this.refsArray){
             promises.push(childRef.getInputNewNode(node))
         }

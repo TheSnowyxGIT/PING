@@ -50,4 +50,8 @@ export class FileNode implements F_Node{
     }
     return null;
   }
+
+  public equals(node: FileNode): boolean{
+    return this.relativePath === node.relativePath;
+  }
 }
