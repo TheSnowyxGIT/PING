@@ -15,7 +15,7 @@ function createWindow(){
 
     win.loadFile(p.join(__dirname, "../index.html"))
 
-    win.webContents.openDevTools();
+    //win.webContents.openDevTools();
 }
 
 app.on("ready", () => {

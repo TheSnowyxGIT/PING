@@ -6,7 +6,7 @@ import ProjectHeader from "./ProjectHeader";
 import { Tree } from "./Tree";
 
 interface ProjectWindowProps {
-    rootNode: FileNode;
+    rootNode: FileNode | null;
     selectedNode: FileNode | null;
     onSelected: (node: FileNode) => void;
 }
@@ -26,6 +26,8 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
     async onNewFileClicked(){
         if (this.rootNode_ref.current){
             let selectedFolderNode = this.props.selectedNode || this.props.rootNode;
+            if (selectedFolderNode == null)
+                return;
             if (selectedFolderNode.type !== NodeType.FOLDER){
                 if (selectedFolderNode.parent){
                     selectedFolderNode = selectedFolderNode.parent;
@@ -41,17 +43,17 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
     render() {
         return (
             <div className="projectWindow">
-                <ProjectHeader 
+                {this.props.rootNode ? (<ProjectHeader 
                     name = {this.props.rootNode.name}
-                    onNewFileClick = {() => this.onNewFileClicked()}
-                />
+                    onNewFileClick = {() => this.onNewFileClicked()}/>) : null}
+                {this.props.rootNode ? (
                 <Tree 
                     ref={this.rootNode_ref}
                     node={this.props.rootNode}
                     padding={0}
                     onSelected={node => this.props.onSelected(node)}
                     selectedNode={this.props.selectedNode}
-                />
+                />) : null}
             </div>
         );
     }

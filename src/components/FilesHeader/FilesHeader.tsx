@@ -4,7 +4,7 @@ import { FileNode } from "../../classes/FileNode";
 import FileBox from "./FileBox";
 
 interface FilesHeaderProps {
-    openedFiles: FileNode[]
+    openedFiles: FileEdit[]
     selectedFile: FileNode | null
     onClose: (node: FileNode) => void;
     onSelect: (node: FileNode) => void;
@@ -26,10 +26,10 @@ class FilesHeader extends React.Component<FilesHeaderProps, FilesHeaderState> {
                     {
                         this.props.openedFiles.map(file => {
                             return (<FileBox 
-                                name={file.name} 
-                                active={this.props.selectedFile ? file.equals(this.props.selectedFile) : false}
-                                onClick={() => this.props.onSelect(file)}
-                                onClose={() => this.props.onClose(file)}
+                                name={file.file.name} 
+                                active={this.props.selectedFile ? file.file.equals(this.props.selectedFile) : false}
+                                onClick={() => this.props.onSelect(file.file)}
+                                onClose={() => this.props.onClose(file.file)}
                             />)
                         })
                     }

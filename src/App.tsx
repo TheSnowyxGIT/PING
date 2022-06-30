@@ -2,7 +2,6 @@ import React from 'react';
 import AlertQueue from './components/AlertQueue';
 import Main from './pages/main';
 
-
 interface AppProps {
   
 }

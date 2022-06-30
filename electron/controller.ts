@@ -3,7 +3,8 @@ import { Report } from "../src/shared/report";
 import { F_Node, F_Project } from "../src/shared/F_interfaces";
 import myide from "./myide/myide";
 import { NodeType } from "../src/shared/ideEnums";
-import { F_NodeFrom } from "./myide/entity/node";
+import { F_NodeFrom, MyNode } from "./myide/entity/node";
+import * as p from "path"
 
 
 
@@ -105,4 +106,87 @@ export async function createFolder(folderPath: string, name: string): Promise<Re
         }
         throw error;
     }
+}
+
+export async function readFile(filePath: string): Promise<Report<string>> {
+    let project = myide.getCurrentProject();
+
+    if (project === null) {
+        return Report.getReport({
+            isSuccess: false,
+            message: `There is no project opened.`
+        })
+    }
+
+    let fileNode = project.getRootNode().findChildRec(filePath);
+    if (fileNode === null){
+        return Report.getReport({
+            isSuccess: false,
+            message: `The path ${fileNode} is invalid.`
+        })
+    } else if (!fileNode.isFile()){
+        return Report.getReport({
+            isSuccess: false,
+            message: `The path ${fileNode} need to be a file.`
+        });
+    }
+
+    try {
+        let content = fileNode.getFileUTF8Content()
+        return Report.getReport<string>({
+            isSuccess: true,
+            data: content
+        });
+    } catch (error) {
+        if (error instanceof Report){
+            return error;
+        }
+        throw error;
+    }
+}
+
+export async function saveFile(filePath: string, content: string): Promise<Report<void>> {
+    let project = myide.getCurrentProject();
+
+    if (project === null) {
+        return Report.getReport({
+            isSuccess: false,
+            message: `There is no project opened.`
+        })
+    }
+    const ns = project.getNodeService();
+
+    try {
+        let fileNode = project.getRootNode().findChildRec(filePath);
+        if (fileNode !== null){
+            if (!fileNode.isFile()){
+                return Report.getReport({
+                    isSuccess: false,
+                    message: `You can only overwrite a file`
+                })
+            }
+            await ns.overwrite(fileNode, Buffer.from(content, 'utf-8'))
+        } else {
+            let folderPath = p.dirname(filePath);
+            let fileName = p.basename(filePath);
+            let folderNode = project.getRootNode().findChildRec(folderPath);
+            if (folderNode === null){
+                return Report.getReport({
+                    isSuccess: false,
+                    message: `The path ${filePath} is invalid`
+                });
+            }
+            const newNode = await ns.create(folderNode, fileName, NodeType.FILE);
+            await ns.overwrite(newNode, Buffer.from(content, 'utf-8'));
+        }
+        return Report.getReport({
+            isSuccess: true
+        })
+    } catch (error) {
+        if (error instanceof Report){
+            return error;
+        }
+        throw error;
+    }
+   
 }

@@ -7,13 +7,15 @@ import { FileNode } from "./FileNode";
 export class FileEdit {
 
     public isModified = false;
-    public isSaved = false;
 
     public file: FileNode;
 
-    public content: string = "";
+    public content: string;
 
     constructor(file: FileNode, content: string){
         this.file = file;
+        this.content = content;
     }
+
+    
 }

@@ -59,6 +59,28 @@ export default class NodeService {
     }
 
     /**
+     * Overwrite the content.
+     *
+     * @param node  Node to overwrite (must be a file).
+     * @param content Content to insert.
+     * @return The node that has been overwrite.
+     * @throws Exception upon update failure.
+     */
+    public overwrite(node: MyNode, content: Buffer): Promise<MyNode> {
+        return new Promise((resolve, reject) => {
+            if (!node.isFile()){
+                return reject(new Error(`The file to update need to be a file.`));
+            }
+            fs.writeFile(node.getPath(), content, err => {
+                if (err){
+                    return reject(new Error(`The writing of the file failed`));
+                }
+                resolve(node);
+            });
+        })
+    }
+
+    /**
     * Delete the node given as parameter.
     *
     * @param node Node to remove.

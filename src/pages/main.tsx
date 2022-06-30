@@ -1,4 +1,5 @@
 import React from "react";
+import { FileEdit } from "../classes/FileEdit";
 import { FileNode } from "../classes/FileNode";
 import { Ide } from "../classes/Ide";
 import { Project } from "../classes/Project";
@@ -9,6 +10,7 @@ import EditorContainer from "../components/EditorContainer/EditorContainer";
 import FilesHeader from "../components/FilesHeader/FilesHeader";
 import ProjectWindow from "../components/ProjectWindow";
 import { F_Node, F_Project } from "../shared/F_interfaces";
+import { FeatureType } from "../shared/ideEnums";
 import { Report } from "../shared/report";
 
 interface MainProps {
@@ -23,6 +25,12 @@ class Main extends React.Component<MainProps, MainState> {
     constructor(props: MainProps) {
         super(props);
         this.state = { ide: new Ide() };
+
+        window.electron.onMenuCargoBuild(() => {
+          window.electron.execFeature(FeatureType.CARGO_BUILD, {
+            err: (chunk) => console.log(chunk)
+          })
+        })
     }
 
     onProjectOpened(report: Report<F_Project>) {
@@ -70,14 +78,21 @@ class Main extends React.Component<MainProps, MainState> {
         }
       }
 
-      selectNode(node: FileNode | null) {
-        this.setState(state => {
-          if (state.ide.opened_project){
-             state.ide.opened_project.setSelectedNode(node);
-             node && state.ide.opened_project.openFile(node);
+      async selectNode(node: FileNode | null) {
+        if (this.state.ide.opened_project){
+          this.state.ide.opened_project.setSelectedNode(node);
+          if (node) {
+            this.state.ide.opened_project.openFile(node).then(() => {
+              this.setState(state => {
+                return {ide: state.ide}
+              })
+            })
+          } else {
+            this.setState(state => {
+              return {ide: state.ide}
+            })
           }
-          return {ide: state.ide}
-        })
+        }
       }
 
       /**
@@ -92,6 +107,27 @@ class Main extends React.Component<MainProps, MainState> {
         })
       }
 
+      // Only Localy
+      updateFileContent(newContent: string, node: FileEdit){
+        node.content = newContent;
+        node.isModified = true;
+        this.setState(state => {
+          return {ide: state.ide}
+        })
+      }
+
+      savefile(fileEdit: FileEdit){
+        window.electron.savefile(fileEdit.file.relativePath, fileEdit.content).then(report => {
+          if (!report.isSuccess){
+            AlertQueue.sendAlert({time: 3000, type: AlertType.ERROR, title: "Save File", content: report.message || "unknown"})
+          } else {
+            fileEdit.isModified = false;
+            this.setState({
+              ide: this.state.ide
+            })
+          }
+        })
+      }
 
     
       componentDidMount(){
@@ -110,11 +146,11 @@ class Main extends React.Component<MainProps, MainState> {
         return (
           <div className="container">
             <div className="left">
-                {projectOpened ? (<ProjectWindow 
-                        rootNode={projectOpened.rootNode}
-                        selectedNode={projectOpened.selectedNode}
+                <ProjectWindow 
+                        rootNode={projectOpened ? projectOpened.rootNode : null}
+                        selectedNode={projectOpened ? projectOpened.selectedNode : null}
                         onSelected={(node) => this.selectNode(node)}
-                />) : (<>No Project</>)}
+                />
             </div>
             <div className="right">
                 <EditorContainer 
@@ -122,7 +158,9 @@ class Main extends React.Component<MainProps, MainState> {
                   selectedFile={selectedFile}
                   onBoxClose={node => this.closeNode(node)}
                   onBoxSelecte={(node) => this.selectNode(node)}
-                  onContentChange={() => {}}
+                  onContentChange={(content, nodeEdit) => this.updateFileContent(content, nodeEdit)}
+                  onSave={fileEdit => this.savefile(fileEdit)}
+                  isProjectOpened={projectOpened !== null}
                 />
             </div>
         </div>

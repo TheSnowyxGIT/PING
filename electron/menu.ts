@@ -15,6 +15,14 @@ const template: (MenuItem | MenuItemConstructorOptions)[]= [
                     const window = BrowserWindow.getFocusedWindow()
                     window.webContents.send("openProject", report);
                 }
+            }, 
+            {
+                label: "OpenDevTool",
+                click: async function(){
+                    const window = BrowserWindow.getFocusedWindow()
+                    window.webContents.openDevTools()
+                }
+
             }
         ]
     },
@@ -27,6 +35,18 @@ const template: (MenuItem | MenuItemConstructorOptions)[]= [
             { role: "cut" },
             { role: "copy" },
             { role: "paste" },
+        ]
+    },
+    {
+        label: "Cargo",
+        submenu: [
+            {
+                label: "Build",
+                click: async function(){
+                    const window = BrowserWindow.getFocusedWindow()
+                    window.webContents.send("menu:cargo:build");
+                }
+            }
         ]
     }
 ]

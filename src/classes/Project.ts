@@ -1,3 +1,5 @@
+import { AlertType } from "../components/Alert";
+import AlertQueue from "../components/AlertQueue";
 import { F_Aspect, F_Node, F_Project } from "../shared/F_interfaces";
 import { NodeType } from "../shared/ideEnums";
 import { FileEdit } from "./FileEdit";
@@ -29,15 +31,20 @@ export class Project implements F_Project {
         this.selectedFile = null;
     }
 
-    public openFile(node: FileNode) {
+    public async openFile(node: FileNode) {
         if (node.type !== NodeType.FILE)
           return;
         // check alredy open
         if (!this.filesOpened.some(files => files.file.equals(node))){
           // Not opened
-          let content = "basic content"
-          let fileEdit = new FileEdit(node, content);
-          this.filesOpened.push(fileEdit);
+          console.log(node)
+          let report = await window.electron.getContentFile(node.relativePath)
+          if (report.isSuccess && report.data !== null && report.data !== undefined){
+            let fileEdit = new FileEdit(node, report.data);
+            this.filesOpened.push(fileEdit);
+          } else {
+            AlertQueue.sendAlert({type:AlertType.ERROR, time: 3000, title: "Read file", content: report.message || ""})
+          }
         }
     }
 

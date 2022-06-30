@@ -289,7 +289,6 @@ export class MyNode {
      */
     public findChildRec(path: string): MyNode | null {
         let fileName = path.split(p.sep)[0];
-        console.log(path.split(p.sep))
         for (let child of this.getChildren()){
             if (child.getName() === fileName){
                 if (path.split(p.sep).length === 1){
@@ -298,7 +297,7 @@ export class MyNode {
                     let path_splited = path.split(p.sep);
                     path_splited.splice(0,1);
                     let subpath = p.join.apply(null, path_splited);
-                    return this.findChildRec(subpath);
+                    return child.findChildRec(subpath);
                 }
             }
         }
