@@ -8,10 +8,6 @@ interface EditorContainerProps {
     isProjectOpened: boolean
     selectedFile: FileNode | null;
     files: FileEdit[];
-    onBoxClose: (node: FileNode) => void;
-    onBoxSelecte: (node: FileNode) => void;
-    onContentChange: (data: string, nodeEdit: FileEdit) => void;
-    onSave: (nodeEdit: FileEdit) => void;
 }
  
 interface EditorContainerState {
@@ -45,13 +41,9 @@ class EditorContainer extends React.Component<EditorContainerProps, EditorContai
                 <FilesHeader 
                     openedFiles={this.props.files.map(fileEdit => fileEdit)}
                     selectedFile={this.props.selectedFile}
-                    onClose={node => this.props.onBoxClose(node)}
-                    onSelect={node => this.props.onBoxSelecte(node)}
                 />
                 {selectedFileEdit ? (<Editor 
                     fileEdit={selectedFileEdit} 
-                    onChange={data => {this.props.onContentChange(data, selectedFileEdit)}}
-                    onSave={this.props.onSave.bind(this)}
                 />) : (<div className="emptyProject">
                     {!this.props.isProjectOpened ? <h1>No Opened Project</h1> : null}
                 </div>

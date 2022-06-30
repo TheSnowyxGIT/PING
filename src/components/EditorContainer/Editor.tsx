@@ -8,11 +8,10 @@ import "ace-builds/src-noconflict/theme-twilight"
 import "ace-builds/src-noconflict/ext-language_tools"
 import { FileEdit } from "../../classes/FileEdit";
 import React from "react";
+import AlertQueue from "../AlertQueue";
  
 interface EditorProps {
     fileEdit: FileEdit
-    onChange: (value: string) => void
-    onSave: (fileEdit: FileEdit) => void
 }
  
 interface EditorState {
@@ -27,10 +26,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
         this.state = { };
     }
 
+
     onKeyDown(event: React.KeyboardEvent){
         if ((event.ctrlKey || event.metaKey) && event.key === 's'){
             event.preventDefault();
-            this.props.onSave(this.props.fileEdit);
+            this.props.fileEdit.save();
         }
     }
 
@@ -39,12 +39,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
             <div style={{height: "100%"}} onKeyDown={this.onKeyDown.bind(this)}>
                 <AceEditor
                     placeholder=""
-                    defaultValue={this.props.fileEdit.content}
+                    defaultValue={this.props.fileEdit.getContent()}
                     mode="rust"
                     theme="twilight"
                     name="Editor"
-                    onChange={data => this.props.onChange(data)}
-                    value={this.props.fileEdit.content}
+                    onChange={data => this.props.fileEdit.setContent(data)}
+                    value={this.props.fileEdit.getContent()}
                     fontSize={Editor.fontSize}
                     showPrintMargin={false}
                     showGutter={true}

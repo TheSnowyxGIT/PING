@@ -4,51 +4,63 @@ import { F_Aspect, F_Node, F_Project } from "../shared/F_interfaces";
 import { NodeType } from "../shared/ideEnums";
 import { FileEdit } from "./FileEdit";
 import { FileNode } from "./FileNode";
+import { Ide } from "./Ide";
 
 export class Project implements F_Project {
+
+  public static of(project: F_Project): Project{
+    return new Project(FileNode.of(project.rootNode), project.aspects);
+  }
+
+    // attributes
     public rootNode: FileNode;
     public selectedNode: FileNode | null = null;
     public selectedFile: FileNode | null = null;
-
     public filesOpened: FileEdit[] = [];
-
     public aspects: F_Aspect[];
 
-    public static of(project: F_Project): Project{
-        return new Project(FileNode.of(project.rootNode), project.aspects);
-    }
-
+    // Constructor
     constructor(rootNode: FileNode, aspects: F_Aspect[]){
         this.aspects = aspects;
         this.rootNode = rootNode;
     }
 
-    public setSelectedNode(node: FileNode | null){
-      this.selectedNode = node;
-      if (node && node.type === NodeType.FILE)
-        this.selectedFile = node;
-      if (!node)
-        this.selectedFile = null;
+    public async select(node: FileNode, update: boolean = true){
+        this.selectedNode = node;
+        if (node.type === NodeType.FILE){
+          this.selectedFile = node;
+        }
+        await this.openFile(node, false);
+        // update React
+        update && Ide.getInstance().updateReact();
     }
 
-    public async openFile(node: FileNode) {
+    public unselect(update: boolean = true){
+      this.selectedNode = null;
+      // update React
+      update && Ide.getInstance().updateReact();
+  }
+
+    public async openFile(node: FileNode, update: boolean = true) {
         if (node.type !== NodeType.FILE)
           return;
-        // check alredy open
+        // check already open
         if (!this.filesOpened.some(files => files.file.equals(node))){
           // Not opened
-          console.log(node)
           let report = await window.electron.getContentFile(node.relativePath)
-          if (report.isSuccess && report.data !== null && report.data !== undefined){
-            let fileEdit = new FileEdit(node, report.data);
+          if (report.isSuccess){
+            let data = report.data ? report.data : "";
+            let fileEdit = new FileEdit(node, data);
             this.filesOpened.push(fileEdit);
+            // update React
+            update && Ide.getInstance().updateReact();
           } else {
-            AlertQueue.sendAlert({type:AlertType.ERROR, time: 3000, title: "Read file", content: report.message || ""})
+            AlertQueue.showReport("Read file", report);
           }
         }
     }
 
-    public closeFile(node: FileNode) {
+    public closeFile(node: FileNode, update: boolean = true) {
       // check file opened
       let index = 0;
       for (let fileEdit of this.filesOpened){
@@ -61,19 +73,22 @@ export class Project implements F_Project {
         this.filesOpened.splice(index, 1);
         if (this.selectedFile){
           if (this.selectedFile.equals(node)){
-            let node: FileNode | null = null;
             if (this.filesOpened.length > 0){
               index = index - 1 < 0 ? 0 : index - 1;
-              node = this.filesOpened[index].file;
+              let node = this.filesOpened[index].file;
+              this.select(node, false);
+            } else {
+              this.unselect(false);
             }
-            this.setSelectedNode(node);
           }
         }
+        // update React
+        update && Ide.getInstance().updateReact();
       }
     }
 
     // add node to tree
-    public addNode(node: F_Node): boolean {
+    public addNode(node: F_Node, update: boolean = true): boolean {
       let path = node.relativePath.split(window.libraries.path.sep);
       path.pop();
       let parent = this.rootNode.getChild(path);
@@ -82,6 +97,8 @@ export class Project implements F_Project {
       let newNode = FileNode.of(node);
       newNode.parent = parent;
       parent.children.push(newNode);
+      // update React
+      update && Ide.getInstance().updateReact();
       return true;
     }
 }

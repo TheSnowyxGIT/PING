@@ -5,13 +5,13 @@ import { FileNode } from "../classes/FileNode";
 import { NodeType } from "../shared/ideEnums";
 import { HighlightSpanKind } from "typescript";
 import { resolve } from "node:path/win32";
+import { Ide } from "../classes/Ide";
 
 
 interface TreeProps {
   node: FileNode;
   selectedNode: FileNode | null
   padding: number;
-  onSelected: (node: FileNode) => void;
 }
 
 interface TreeState {
@@ -47,13 +47,19 @@ export class Tree extends React.Component<TreeProps, TreeState> {
   }
 
   private onCollapseClick(event: MouseEvent) {
-      // Call callback if there is not selected Node or the selected node is not this node
-      if (!this.props.selectedNode || !this.props.selectedNode.equals(this.props.node))
-        this.props.onSelected(this.props.node)
-      // Update Collapse of the node
-      this.setState({
-        isCollapse: !this.state.isCollapse
-      })
+    const projectOpened = Ide.getInstance().opened_project;
+    if (!projectOpened){
+        return;
+    }
+    // Call callback if there is not selected Node or the selected node is not this node
+    if (!this.props.selectedNode || !this.props.selectedNode.equals(this.props.node)){
+      projectOpened.select(this.props.node)
+    }
+      
+    // Update Collapse of the node
+    this.setState({
+      isCollapse: !this.state.isCollapse
+    })
   }
 
   public async getInputNewNode(node: FileNode) : Promise<string> {
@@ -133,7 +139,6 @@ export class Tree extends React.Component<TreeProps, TreeState> {
                 ref={ref => ref && (this.refsArray[i] = ref)}
                 node={child}
                 padding={this.props.padding + Tree.padding_width}
-                onSelected={node => this.props.onSelected(node)}
                 selectedNode={this.props.selectedNode}
               />
             );})

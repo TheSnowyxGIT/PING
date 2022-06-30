@@ -1,13 +1,12 @@
 import React from "react";
 import { FileEdit } from "../../classes/FileEdit";
 import { FileNode } from "../../classes/FileNode";
+import { Ide } from "../../classes/Ide";
 import FileBox from "./FileBox";
 
 interface FilesHeaderProps {
     openedFiles: FileEdit[]
     selectedFile: FileNode | null
-    onClose: (node: FileNode) => void;
-    onSelect: (node: FileNode) => void;
 }
  
 interface FilesHeaderState {
@@ -19,7 +18,12 @@ class FilesHeader extends React.Component<FilesHeaderProps, FilesHeaderState> {
         super(props);
         this.state = { };
     }
-    render() { 
+
+    render() {
+        const projectOpened = Ide.getInstance().opened_project;
+        if (!projectOpened)
+            return null;
+
         return (
             <div className="filesHeader">
                 <div className="files">
@@ -28,8 +32,8 @@ class FilesHeader extends React.Component<FilesHeaderProps, FilesHeaderState> {
                             return (<FileBox 
                                 name={file.file.name} 
                                 active={this.props.selectedFile ? file.file.equals(this.props.selectedFile) : false}
-                                onClick={() => this.props.onSelect(file.file)}
-                                onClose={() => this.props.onClose(file.file)}
+                                onClick={() => projectOpened.select(file.file)}
+                                onClose={() => projectOpened.closeFile(file.file)}
                             />)
                         })
                     }

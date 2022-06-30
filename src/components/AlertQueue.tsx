@@ -1,5 +1,6 @@
 import React from "react";
-import { Alert, AlertProps } from "./Alert";
+import { Report } from "../shared/report";
+import { Alert, AlertProps, AlertType } from "./Alert";
 
 
 type NewAlert = AlertProps & {time: number};
@@ -15,12 +16,28 @@ interface AlertQueueState {
  
 class AlertQueue extends React.Component<AlertQueueProps, AlertQueueState> {
 
-    public static sendAlert(alert: NewAlert){
-        let alertQueue = new AlertQueue({});
-        alertQueue.addAlert(alert);
+    // Singleton
+    private static instance: AlertQueue;
+    public static getInstance(){
+        return AlertQueue.instance;
     }
 
-    private static instance: AlertQueue;
+    // Show the given alert
+    public static sendAlert(alert: NewAlert){
+        AlertQueue.getInstance().addAlert(alert);
+    }
+    // Show the alert corresponding to the report
+    public static showReport(title: string, report: Report<unknown>){
+        let alert: NewAlert = {
+            time: 3000,
+            title: title,
+            type: report.isSuccess ? AlertType.INFO : AlertType.ERROR,
+            content: report.message || "no data"
+        } 
+        AlertQueue.getInstance().addAlert(alert);
+    }
+    
+    // Constructor
     constructor(props: AlertQueueProps) {
         if (AlertQueue.instance){
             return AlertQueue.instance;
@@ -32,6 +49,9 @@ class AlertQueue extends React.Component<AlertQueueProps, AlertQueueState> {
         AlertQueue.instance = this;
     }
 
+    /**
+     * Add the given alert in the queue of alerts
+     */
     public addAlert(alert: NewAlert){
         const datedAlert: DatedAlert = {
             content: alert.content,
