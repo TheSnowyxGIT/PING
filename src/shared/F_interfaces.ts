@@ -15,3 +15,8 @@ export interface F_Project {
     rootNode: F_Node,
     aspects: F_Aspect[]
 };
+
+export interface F_CratesDependency {
+    id: string
+    lastestVersion: string
+}

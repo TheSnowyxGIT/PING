@@ -1,5 +1,7 @@
 import React from 'react';
+import { CratesDependency } from './classes/CratesDependency';
 import AlertQueue from './components/AlertQueue';
+import CratesIOWindow from './components/CratesIOWindow';
 import Main from './pages/main';
 
 
@@ -23,7 +25,7 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <div className="App">
         <AlertQueue />
-        <Main />
+        <CratesIOWindow />
       </div>
     );
   }

@@ -1,11 +1,12 @@
 import { dialog } from "electron";
 import { Report } from "../src/shared/report";
-import { F_Node, F_Project } from "../src/shared/F_interfaces";
+import { F_CratesDependency, F_Node, F_Project } from "../src/shared/F_interfaces";
 import myide from "./myide/myide";
 import { NodeType } from "../src/shared/ideEnums";
 import { F_NodeFrom } from "./myide/entity/node";
+import { Crate, CratesIO, Summary } from "crates.io"
 
-
+const cratesIO = new CratesIO()
 
 export async function openProject(): Promise<Report<F_Project>> {
     // Open Dialog on the window
@@ -105,4 +106,23 @@ export async function createFolder(folderPath: string, name: string): Promise<Re
         }
         throw error;
     }
+}
+
+
+export async function getCratesDependenciesSummary(): Promise<Report<F_CratesDependency[]>> {
+    function F_CratesDependencyFrom(data: Summary): F_CratesDependency[] {
+        return data.most_downloaded.map((dep:Crate) => {return {
+                    id: dep.id,
+                    lastestVersion: dep.max_version
+                }})
+    }
+    return new Promise((resolve, _) => {
+        cratesIO.summary()
+                .then((data: Summary) => {
+                    resolve(Report.getReport({
+                        isSuccess: true,
+                        data: F_CratesDependencyFrom(data)
+                    }));
+                })
+    });
 }

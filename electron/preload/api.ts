@@ -1,7 +1,7 @@
 import {ipcRenderer} from "electron"
-import { F_Node, F_Project } from "../../src/shared/F_interfaces";
+import { F_CratesDependency, F_Node, F_Project } from "../../src/shared/F_interfaces";
 import { FeatureType } from "../../src/shared/ideEnums";
-import { CreateFileOptions, CreateFolderOptions, ExecFeatureOptions, OpenProjectOptions } from "../listener";
+import { CratesDependenciesOptions, CreateFileOptions, CreateFolderOptions, ExecFeatureOptions, OpenProjectOptions } from "../listener";
 import { Report } from "../../src/shared/report";
 
 /** Transfere Enums */
@@ -113,6 +113,33 @@ export function createFolder(folderPath: string, name: string): void {
 
 export function onFolderCreated(listener: (report: Report<F_Node>) => void){
     ipcRenderer.on("createFolder", (_, report: Report<F_Node>) => {
+        listener(report);
+    })
+}
+
+export async function getCratesDependenciesSummary(): Promise<Report<F_CratesDependency[]>> {
+    return new Promise((resolve, reject) => {
+        let channel = `CratesDependenciesSummary`;
+        let execId = Math.floor(Math.random() * 1000000000);
+    
+         // Channel of the response
+         let reportChannel = channel + ":report" + execId;
+    
+         let options: CratesDependenciesOptions = {
+            reportChannel: reportChannel,
+        }
+    
+        function reportHandler(event: Electron.IpcRendererEvent, report: Report<F_CratesDependency[]>){
+            ipcRenderer.removeListener(reportChannel, reportHandler);
+            resolve(report);
+        }
+        ipcRenderer.send(channel, options);
+        ipcRenderer.on(reportChannel, reportHandler)
+    })
+}
+
+export function onCratesDependencies(listener: (report: Report<F_CratesDependency[]>) => void){
+    ipcRenderer.on(`CratesDependenciesSummary`, (_, report: Report<F_CratesDependency[]>) => {
         listener(report);
     })
 }

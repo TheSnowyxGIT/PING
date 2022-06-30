@@ -2,13 +2,15 @@ import { F_Aspect } from "../../../src/shared/F_interfaces";
 import { AspectType } from "../../../src/shared/ideEnums";
 import Any from "./Aspects/any";
 import Cargo from "./Aspects/cargo";
+import { CratesDependencies } from "./Aspects/CratesDependencies";
 import { Feature_ } from "./feature";
 import { MyProject } from "./project";
 
 
 export let AllAspects: Aspect_[] = [
     new Any(),
-    new Cargo()
+    new Cargo(),
+    new CratesDependencies(),
 ];
 
 
