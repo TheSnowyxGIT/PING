@@ -1,7 +1,6 @@
 import React from "react";
-import { FileNode } from "../classes/FileNode";
-import { Project } from "../classes/Project";
-import { NodeType } from "../shared/ideEnums";
+import { FileNode } from "../../classes/FileNode";
+import { NodeType } from "../../shared/ideEnums";
 import ProjectHeader from "./ProjectHeader";
 import { Tree } from "./Tree";
 
@@ -34,7 +33,7 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
             }
             let fileName = await this.rootNode_ref.current.getInputNewNode(selectedFolderNode)
             if (fileName !== ""){
-                window.electron.createFile(selectedFolderNode.relativePath, fileName);
+                window.project.createFile(selectedFolderNode.relativePath, fileName);
             }
         }
     }

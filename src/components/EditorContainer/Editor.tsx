@@ -1,14 +1,10 @@
-import { useState, KeyboardEvent } from "react";
 import AceEditor from "react-ace";
-import { Ace } from "ace-builds";
-
 import "ace-builds/src-noconflict/ext-searchbox";
 import "ace-builds/src-noconflict/mode-rust"
 import "ace-builds/src-noconflict/theme-twilight"
 import "ace-builds/src-noconflict/ext-language_tools"
 import { FileEdit } from "../../classes/FileEdit";
 import React from "react";
-import AlertQueue from "../AlertQueue";
  
 interface EditorProps {
     fileEdit: FileEdit

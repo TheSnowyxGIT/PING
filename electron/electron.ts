@@ -1,6 +1,6 @@
 import {app, BrowserWindow } from "electron";
 import * as p from "path";
-import "./listener"
+import "./listeners/FeaturesListener"
 import "./menu"
 import "./myide/myide"
 

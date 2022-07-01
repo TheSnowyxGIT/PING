@@ -1,11 +1,10 @@
 import React, {MouseEvent, useEffect } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faChevronRight, faChevronDown, faFolder, faFile} from "@fortawesome/free-solid-svg-icons"
-import { FileNode } from "../classes/FileNode";
-import { NodeType } from "../shared/ideEnums";
 import { HighlightSpanKind } from "typescript";
-import { resolve } from "node:path/win32";
-import { Ide } from "../classes/Ide";
+import { FileNode } from "../../classes/FileNode";
+import { NodeType } from "../../shared/ideEnums";
+import { Ide } from "../../classes/Ide";
 
 
 interface TreeProps {

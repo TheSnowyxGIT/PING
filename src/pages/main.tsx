@@ -1,16 +1,11 @@
 import React from "react";
-import { FileEdit } from "../classes/FileEdit";
 import { FileNode } from "../classes/FileNode";
 import { Ide } from "../classes/Ide";
 import { Project } from "../classes/Project";
-import { AlertType } from "../components/Alert";
-import AlertQueue from "../components/AlertQueue";
-import Editor from "../components/EditorContainer/Editor";
+import AlertQueue from "../components/Alerts/AlertQueue";
 import EditorContainer from "../components/EditorContainer/EditorContainer";
-import FilesHeader from "../components/FilesHeader/FilesHeader";
-import ProjectWindow from "../components/ProjectWindow";
+import ProjectWindow from "../components/ProjectWindow/ProjectWindow";
 import { F_Node, F_Project } from "../shared/F_interfaces";
-import { FeatureType } from "../shared/ideEnums";
 import { Report } from "../shared/report";
 
 interface MainProps {
@@ -59,9 +54,9 @@ class Main extends React.Component<MainProps, MainState> {
 
     // Set All listeners
     componentDidMount(){
-      window.electron.onProjectOpened((report) => this.onProjectOpened(report));
-      window.electron.onFileCreated((report) => this.onFileCreated(report));
-      window.electron.onFolderCreated((report) => this.onFolderCreated(report))
+      window.project.onProjectOpened((report) => this.onProjectOpened(report));
+      window.project.onFileCreated((report) => this.onFileCreated(report));
+      window.project.onFolderCreated((report) => this.onFolderCreated(report))
     }
   
     render() { 

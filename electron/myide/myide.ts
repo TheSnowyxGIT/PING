@@ -15,7 +15,7 @@ class MyIde {
         return this.curr_project;
     }
 
-    public executeFeature(feature: FeatureType, params: FeatureParams): Promise<Report<unknown>> {
+    public executeFeature<ParamsType>(feature: FeatureType, params: FeatureParams<ParamsType>): Promise<Report<unknown>> {
         return this.projectService.execute(this.getCurrentProject(), feature, params);
     }
 

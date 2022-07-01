@@ -1,5 +1,4 @@
-import { AlertType } from "../components/Alert";
-import AlertQueue from "../components/AlertQueue";
+import AlertQueue from "../components/Alerts/AlertQueue";
 import { F_Aspect, F_Node, F_Project } from "../shared/F_interfaces";
 import { NodeType } from "../shared/ideEnums";
 import { FileEdit } from "./FileEdit";
@@ -47,7 +46,7 @@ export class Project implements F_Project {
         // check already open
         if (!this.filesOpened.some(files => files.file.equals(node))){
           // Not opened
-          let report = await window.electron.getContentFile(node.relativePath)
+          let report = await window.project.getContentFile(node.relativePath)
           if (report.isSuccess){
             let data = report.data ? report.data : "";
             let fileEdit = new FileEdit(node, data);

@@ -1,5 +1,5 @@
-import AlertQueue from "../components/AlertQueue";
-import { NodeType } from "../shared/ideEnums";
+
+import AlertQueue from "../components/Alerts/AlertQueue";
 import { FileNode } from "./FileNode";
 import { Ide } from "./Ide";
 
@@ -30,7 +30,7 @@ export class FileEdit {
     }
 
     public save(update: boolean = true){
-        window.electron.savefile(this.file.relativePath, this.getContent()).then(report => {
+        window.project.savefile(this.file.relativePath, this.getContent()).then(report => {
             if (!report.isSuccess){
                 AlertQueue.showReport("Save File", report)
             } else {

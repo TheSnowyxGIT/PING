@@ -1,8 +1,5 @@
-import { isNullishCoalesce, textChangeRangeIsUnchanged } from "typescript";
-import { Tree } from "../components/Tree";
 import { F_Node } from "../shared/F_interfaces";
 import { NodeType } from "../shared/ideEnums";
-import { Report } from "../shared/report";
 import { Ide } from "./Ide";
 
 

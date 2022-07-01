@@ -1,5 +1,5 @@
 import React from "react";
-import { Report } from "../shared/report";
+import { Report } from "../../shared/report";
 import { Alert, AlertProps, AlertType } from "./Alert";
 
 
