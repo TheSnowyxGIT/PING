@@ -1,9 +1,9 @@
 import { dialog } from "electron";
-import { Report } from "../src/shared/report";
-import { F_Node, F_Project } from "../src/shared/F_interfaces";
-import myide from "./myide/myide";
-import { NodeType } from "../src/shared/ideEnums";
-import { F_NodeFrom, MyNode } from "./myide/entity/node";
+import { Report } from "../../src/shared/report";
+import { F_Node, F_Project } from "../../src/shared/F_interfaces";
+import myide from "../myide/myide";
+import { NodeType } from "../../src/shared/ideEnums";
+import { F_NodeFrom } from "../myide/entity/node";
 import * as p from "path"
 
 

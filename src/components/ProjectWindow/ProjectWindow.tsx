@@ -1,14 +1,12 @@
 import React from "react";
-import { FileNode } from "../classes/FileNode";
-import { Project } from "../classes/Project";
-import { NodeType } from "../shared/ideEnums";
+import { FileNode } from "../../classes/FileNode";
+import { NodeType } from "../../shared/ideEnums";
 import ProjectHeader from "./ProjectHeader";
 import { Tree } from "./Tree";
 
 interface ProjectWindowProps {
     rootNode: FileNode | null;
     selectedNode: FileNode | null;
-    onSelected: (node: FileNode) => void;
 }
  
 interface ProjectWindowState {
@@ -35,7 +33,7 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
             }
             let fileName = await this.rootNode_ref.current.getInputNewNode(selectedFolderNode)
             if (fileName !== ""){
-                window.electron.createFile(selectedFolderNode.relativePath, fileName);
+                window.project.createFile.asyncSend({folderPath: selectedFolderNode.relativePath, name: fileName});
             }
         }
     }
@@ -51,7 +49,6 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
                     ref={this.rootNode_ref}
                     node={this.props.rootNode}
                     padding={0}
-                    onSelected={node => this.props.onSelected(node)}
                     selectedNode={this.props.selectedNode}
                 />) : null}
             </div>

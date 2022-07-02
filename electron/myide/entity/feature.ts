@@ -2,10 +2,10 @@ import { FeatureType } from "../../../src/shared/ideEnums";
 import { Report } from "../../../src/shared/report";
 import { MyProject} from "./project";
 
-export interface FeatureParams {
+export interface FeatureParams<ParamsType> {
     errCallback: (chunk: string) => void,
     outCallback: (chunk: string) => void,
-    others?: any
+    params: ParamsType
 };
 
 export interface Feature_ {
@@ -14,7 +14,7 @@ export interface Feature_ {
      * @param params  Parameters given to the features.
      * @return {@link ExecutionReport}
      */
-    execute(project: MyProject, params: FeatureParams): Promise<Report<unknown>>;
+    execute<ParamsType>(project: MyProject, params: FeatureParams<ParamsType>): Promise<Report<unknown>>;
 
     /**
      * @return The type of the Feature.

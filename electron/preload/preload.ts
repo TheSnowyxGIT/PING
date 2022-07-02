@@ -1,6 +1,8 @@
 import { contextBridge } from "electron";
-import * as api from "./api"
+import * as projectApi from "../APIs/ProjectApi"
+import * as featuresApi from "../APIs/FeaturesApi"
 import * as libraries from "./libraries"
 
-contextBridge.exposeInMainWorld('electron', api);
+contextBridge.exposeInMainWorld('features', featuresApi);
+contextBridge.exposeInMainWorld('project', projectApi);
 contextBridge.exposeInMainWorld('libraries', libraries);

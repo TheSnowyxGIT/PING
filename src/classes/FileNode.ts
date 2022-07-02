@@ -1,11 +1,15 @@
-import { isNullishCoalesce, textChangeRangeIsUnchanged } from "typescript";
-import { Tree } from "../components/Tree";
 import { F_Node } from "../shared/F_interfaces";
 import { NodeType } from "../shared/ideEnums";
-import { Report } from "../shared/report";
+import { Ide } from "./Ide";
 
 
 export class FileNode implements F_Node{
+
+  public static of(node: F_Node): FileNode{
+    return new FileNode(node.path, node.relativePath, node.name, node.type, node.children.map(child => FileNode.of(child)));
+  }
+
+  // attributes
   public path: string;
   public relativePath: string;
   public type: NodeType;
@@ -13,10 +17,7 @@ export class FileNode implements F_Node{
   public name: string;
   public parent: FileNode | null;
 
-  public static of(node: F_Node): FileNode{
-    return new FileNode(node.path, node.relativePath, node.name, node.type, node.children.map(child => FileNode.of(child)));
-  }
-
+  // Constructor
   constructor(path: string, relativePath: string, name: string, type: NodeType, children: FileNode[]) {
     this.path = path;
     this.relativePath = relativePath;
@@ -27,11 +28,13 @@ export class FileNode implements F_Node{
     this.loadParent(this.parent);
   }
 
-  private loadParent(parent: FileNode | null){
+  private loadParent(parent: FileNode | null, update: boolean = true){
     this.parent = parent;
     for (let child of this.children){
-      child.loadParent(this);
+      child.loadParent(this, false);
     }
+    // Update react
+    update && Ide.getInstance().updateReact();
   }
 
   public getChild(path: string[]): FileNode | null{

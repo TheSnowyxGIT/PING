@@ -7,7 +7,7 @@ import { MyProject } from "../project";
 
 class ReloadAspects implements Feature_ {
 
-    async execute(project: MyProject, params: FeatureParams): Promise<Report<F_Aspect[]>> {
+    async execute(project: MyProject, params: FeatureParams<null>): Promise<Report<F_Aspect[]>> {
         await project.loadAspect();
         return Report.getReport({
             isSuccess: true,

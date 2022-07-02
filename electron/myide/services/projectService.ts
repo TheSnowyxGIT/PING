@@ -18,7 +18,7 @@ export default class ProjectService {
         return project;
     }
 
-    public async execute(project: MyProject, featureType: FeatureType, params: FeatureParams) : Promise<Report<unknown>> {
+    public async execute<ParamsType>(project: MyProject, featureType: FeatureType, params: FeatureParams<ParamsType>) : Promise<Report<unknown>> {
         let feature = project.getFeature(featureType);
         if (feature == null){
             return Report.getReport({

@@ -9,7 +9,7 @@ import { MyProject } from "../project";
 
 class CargoBuild implements Feature_ {
 
-    async execute(project: MyProject, params: FeatureParams): Promise<Report<null>> {
+    async execute(project: MyProject, params: FeatureParams<null>): Promise<Report<null>> {
         let rootNode = project.getRootNode();
 
         let report = await run_script("cargo", ["build"], rootNode.getPath(), {

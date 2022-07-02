@@ -1,5 +1,4 @@
-import { click } from "@testing-library/user-event/dist/click";
-import { openProject } from "./controller";
+import { openProject } from "./controllers/ProjectController";
 import { BrowserWindow, ipcMain, Menu, MenuItem, MenuItemConstructorOptions } from "electron";
 
 

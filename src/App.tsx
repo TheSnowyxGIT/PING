@@ -1,5 +1,5 @@
 import React from 'react';
-import AlertQueue from './components/AlertQueue';
+import AlertQueue from './components/Alerts/AlertQueue';
 import Main from './pages/main';
 
 interface AppProps {
