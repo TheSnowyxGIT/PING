@@ -1,25 +1,21 @@
 /**
  * This file defined all entry points of the mainProcess for the request did by the renderer proccess
  */
-import { ipcMain, } from "electron";
 import { FeatureType } from "../../src/shared/ideEnums";
 import * as controller from "../controllers/FeaturesController"
+import { on } from "./listener";
 
-export interface ExecFeatureOptions<ParamsType> {
+export interface ExecFeatureParams<ParamsType> {
     feature: FeatureType,
     outChannel: string,
     errChannel: string,
-    reportChannel: string,
     params: ParamsType
 }
-ipcMain.on("execFeature", async (e, options) => {
-    let featureOptions = options as ExecFeatureOptions<unknown>;
-
-    const report = await controller.execFeature<unknown>(featureOptions.feature, {
-        outCallback: (chunk: string) => e.sender.send(featureOptions.outChannel, chunk),
-        errCallback: (chunk: string) => e.sender.send(featureOptions.errChannel, chunk),
-        params: featureOptions.params
+on<ExecFeatureParams<unknown>, unknown>("execFeature", async (params, e) => {
+    const report = await controller.execFeature<unknown>(params.feature, {
+        outCallback: (chunk: string) => e.sender.send(params.outChannel, chunk),
+        errCallback: (chunk: string) => e.sender.send(params.errChannel, chunk),
+        params: params.params
     })
-
-    e.sender.send(featureOptions.reportChannel, report)
+    return report;
 })

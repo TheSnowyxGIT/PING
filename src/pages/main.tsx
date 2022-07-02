@@ -54,9 +54,9 @@ class Main extends React.Component<MainProps, MainState> {
 
     // Set All listeners
     componentDidMount(){
-      window.project.onProjectOpened((report) => this.onProjectOpened(report));
-      window.project.onFileCreated((report) => this.onFileCreated(report));
-      window.project.onFolderCreated((report) => this.onFolderCreated(report))
+      window.project.openProject.on((report) => this.onProjectOpened(report));
+      window.project.createFile.on((report) => this.onFileCreated(report));
+      window.project.createFolder.on((report) => this.onFolderCreated(report))
     }
   
     render() { 

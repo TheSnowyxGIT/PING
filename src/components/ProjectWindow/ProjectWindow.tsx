@@ -33,7 +33,7 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
             }
             let fileName = await this.rootNode_ref.current.getInputNewNode(selectedFolderNode)
             if (fileName !== ""){
-                window.project.createFile(selectedFolderNode.relativePath, fileName);
+                window.project.createFile.asyncSend({folderPath: selectedFolderNode.relativePath, name: fileName});
             }
         }
     }

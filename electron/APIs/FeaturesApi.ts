@@ -1,7 +1,8 @@
 import {ipcRenderer} from "electron"
-import { ExecFeatureOptions } from "../listeners/FeaturesListener";
+import { ExecFeatureParams } from "../listeners/FeaturesListener";
 import { FeatureType } from "../../src/shared/ideEnums";
 import { Report } from "../../src/shared/report";
+import { RequestOptions } from "../listeners/listener";
 
 interface FeatureFrontParams<ParamsType> {
     out?: (chunk: string) => void,
@@ -23,12 +24,16 @@ export function execFeature<ParamsType, ReportType>(feature: FeatureType, params
         const errChannel = channel + ":err" + execId;
         const outChannel = channel + ":out" + execId;
 
-        let featureOptions: ExecFeatureOptions<ParamsType> = {
+        let featureOptions: ExecFeatureParams<ParamsType> = {
             feature: feature,
-            reportChannel: reportChannel,
             errChannel: errChannel,
             outChannel: outChannel,
             params: params.params
+        }
+
+        let requestOptions: RequestOptions<ExecFeatureParams<ParamsType>> = {
+            reportChannel: reportChannel,
+            params: featureOptions
         }
 
         // Stream handlers for out stream and err stream
@@ -49,7 +54,7 @@ export function execFeature<ParamsType, ReportType>(feature: FeatureType, params
             resolve(report);
         }
 
-        ipcRenderer.send(channel, featureOptions);
+        ipcRenderer.send(channel, requestOptions);
         ipcRenderer.on(reportChannel, reportHandler)
     })
 }

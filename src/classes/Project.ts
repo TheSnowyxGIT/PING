@@ -46,7 +46,7 @@ export class Project implements F_Project {
         // check already open
         if (!this.filesOpened.some(files => files.file.equals(node))){
           // Not opened
-          let report = await window.project.getContentFile(node.relativePath)
+          let report = await window.project.getContentFile.syncSend({filePath: node.relativePath})
           if (report.isSuccess){
             let data = report.data ? report.data : "";
             let fileEdit = new FileEdit(node, data);

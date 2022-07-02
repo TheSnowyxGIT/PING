@@ -1,8 +1,12 @@
 import {app, BrowserWindow } from "electron";
 import * as p from "path";
-import "./listeners/FeaturesListener"
+
+import "./listeners/FeaturesListener";
+import "./listeners/ProjectListener"
+
 import "./menu"
 import "./myide/myide"
+
 
 function createWindow(){
     const win = new BrowserWindow({

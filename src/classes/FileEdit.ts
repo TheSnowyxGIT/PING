@@ -30,7 +30,10 @@ export class FileEdit {
     }
 
     public save(update: boolean = true){
-        window.project.savefile(this.file.relativePath, this.getContent()).then(report => {
+        window.project.savefile.syncSend({
+            filePath: this.file.relativePath,
+            content: this.getContent()
+        }).then(report => {
             if (!report.isSuccess){
                 AlertQueue.showReport("Save File", report)
             } else {
