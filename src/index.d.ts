@@ -2,6 +2,7 @@ export declare global {
     interface Window {
       // add you custom APIs
       features: typeof import("../electron/APIs/FeaturesApi"),
+      crates: typeof import("../electron/APIs/CratesApi"),
       project: typeof import("../electron/APIs/ProjectApi"),
       libraries: typeof import("../electron/preload/libraries"),
     }

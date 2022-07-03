@@ -3,6 +3,7 @@ import * as p from "path";
 
 import "./listeners/FeaturesListener";
 import "./listeners/ProjectListener"
+import "./listeners/CratesListener"
 
 import "./menu"
 import "./myide/myide"
