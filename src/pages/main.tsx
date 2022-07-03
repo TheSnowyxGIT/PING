@@ -3,7 +3,9 @@ import { FileNode } from "../classes/FileNode";
 import { Ide } from "../classes/Ide";
 import { Project } from "../classes/Project";
 import AlertQueue from "../components/Alerts/AlertQueue";
+import ControllerWindow from "../components/ControllerWindow";
 import EditorContainer from "../components/EditorContainer/EditorContainer";
+import LeftMenu from "../components/LeftMenu/LeftMenu";
 import ProjectWindow from "../components/ProjectWindow/ProjectWindow";
 import { F_Node, F_Project } from "../shared/F_interfaces";
 import { Report } from "../shared/report";
@@ -89,29 +91,26 @@ class Main extends React.Component<MainProps, MainState> {
     /* ---/Listeners--- */
 
     // Set All listeners
-    componentDidMount(){
+    /*componentDidMount(){
       window.project.openProject.on((report) => this.onProjectOpened(report));
       window.project.createFile.on((report) => this.onFileCreated(report));
       window.project.createFolder.on((report) => this.onFolderCreated(report));
       window.project.deleteFile.on((report) => this.onFileDeleted(report));
       window.project.deleteFolder.on((report) => this.onFolderDeleted(report));
       window.project.fileChange.on((report) => this.onFileContentChanged(report));
-    }
+    }*/
   
     render() { 
         const projectOpened = this.state.ide.opened_project;
         const selectedNode = projectOpened?.selectedNode;
         const selectedFile = projectOpened?.selectedFile ?  projectOpened.selectedFile : null;
-        let openFiles: FileNode[] = []
-        selectedFile && (openFiles = [selectedFile])
+        const categoryMenu = this.state.ide.categoryMenu;
 
         return (
           <div className="container">
             <div className="left">
-                <ProjectWindow 
-                        rootNode={projectOpened ? projectOpened.rootNode : null}
-                        selectedNode={projectOpened ? projectOpened.selectedNode : null}
-                />
+                <LeftMenu/>
+                <ControllerWindow project={projectOpened} category={categoryMenu.getSelectedType()}/>
             </div>
             <div className="right">
                 <EditorContainer 

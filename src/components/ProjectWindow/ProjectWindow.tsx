@@ -39,6 +39,9 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
     }
 
     render() {
+        
+
+
         return (
             <div className="projectWindow">
                 {this.props.rootNode ? (<ProjectHeader 

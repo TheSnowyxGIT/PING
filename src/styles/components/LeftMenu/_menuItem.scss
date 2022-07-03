@@ -1,0 +1,14 @@
+.menuItem {
+    width: 60px;
+    height: 60px;
+    background-color: $dark2;
+    font-size: 1.5rem;
+    color: $white1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+        color: lighten($white1, 20%);
+    }
+}

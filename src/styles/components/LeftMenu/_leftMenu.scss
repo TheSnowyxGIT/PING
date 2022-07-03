@@ -1,0 +1,9 @@
+.leftMenu {
+    display: grid;
+    grid-template-columns: repeat(1, 60px);
+    grid-template-rows: repeat(auto-fill, 60px);
+    background-color: $dark2;
+    .menuItem {
+        place-self: center;
+    }
+}

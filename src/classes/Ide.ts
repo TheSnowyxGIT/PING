@@ -1,3 +1,4 @@
+import { CategoryMenu } from "./CategoryMenu";
 import { Project } from "./Project";
 
 export class Ide {
@@ -14,6 +15,8 @@ export class Ide {
     public updateReact: () => void = () => {};
     // attributes
     public opened_project: Project | null = null;
+    public categoryMenu = new CategoryMenu();
+
 
     // Constructor
     constructor(updateReact: () => void){
