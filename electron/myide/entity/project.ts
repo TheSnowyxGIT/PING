@@ -4,7 +4,7 @@ import { FeatureType } from "../../../src/shared/ideEnums";
 import { Aspect_ , AllAspects, F_AspectFrom} from "./aspect";
 import { Feature_ } from "./feature";
 import { F_NodeFrom, MyNode } from "./node";
-
+import * as p from "path"
 
 
 export function F_ProjectFrom(project: MyProject): F_Project {
@@ -88,5 +88,13 @@ export class MyProject {
                 this.aspects_.add(aspect);
             }
         }
+    }
+
+    /**
+     * Check if the given path is inside the project
+     */
+    public isIn(path: string): boolean {
+        const relative = p.relative(this.getRootNode().getPath(), path);
+        return relative && !relative.startsWith('..') && !p.isAbsolute(relative);
     }
 }

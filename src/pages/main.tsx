@@ -43,10 +43,46 @@ class Main extends React.Component<MainProps, MainState> {
     }
   
     onFolderCreated(report: Report<F_Node>) {
+      console.log(report.data?.relativePath)
       if (!report.isSuccess){
         AlertQueue.showReport("Create new folder", report);
       } else if (report.data && this.state.ide.opened_project){
         this.state.ide.opened_project.addNode(report.data);
+      }
+    }
+
+    onFileDeleted(report: Report<string>) {
+      if (!report.isSuccess){
+        AlertQueue.showReport("Remove File", report);
+      } else if (report.data && this.state.ide.opened_project){
+        this.state.ide.opened_project.removeNode(report.data);
+      }
+    }
+
+    onFolderDeleted(report: Report<string>) {
+      if (!report.isSuccess){
+        AlertQueue.showReport("Remove Folder", report);
+      } else if (report.data && this.state.ide.opened_project){
+        this.state.ide.opened_project.removeNode(report.data);
+      }
+    }
+
+    onFileContentChanged(report: Report<string>) {
+      if (!report.isSuccess){
+        AlertQueue.showReport("File changed", report);
+      } else if (report.data && this.state.ide.opened_project){
+        const relativePath = report.data;
+        const project = this.state.ide.opened_project;
+        let path_splited = relativePath.split(window.libraries.path.sep);
+        let node_finded = project.rootNode.getChild(path_splited);
+        if (node_finded) {
+          const node = node_finded;
+          let filtered_nodes = project.filesOpened.filter(fileEdit => fileEdit.file.equals(node))
+          if (filtered_nodes.length > 0){
+            const fileEdit = filtered_nodes[0];
+            fileEdit.onExternalContent();
+          }
+        }
       }
     }
 
@@ -56,7 +92,10 @@ class Main extends React.Component<MainProps, MainState> {
     componentDidMount(){
       window.project.openProject.on((report) => this.onProjectOpened(report));
       window.project.createFile.on((report) => this.onFileCreated(report));
-      window.project.createFolder.on((report) => this.onFolderCreated(report))
+      window.project.createFolder.on((report) => this.onFolderCreated(report));
+      window.project.deleteFile.on((report) => this.onFileDeleted(report));
+      window.project.deleteFolder.on((report) => this.onFolderDeleted(report));
+      window.project.fileChange.on((report) => this.onFileContentChanged(report));
     }
   
     render() { 

@@ -49,14 +49,16 @@ export class MyNode {
                     if (parent !== null)
                         relativePath = p.join(parent.getRelativePath(), name);
                     let node = new MyNode(name, path, relativePath, type, parent);
+                    if (parent){
+                        parent.addChild(node);
+                    }
                     if (type === NodeType.FOLDER){
                         fs.readdir(path, async (err, files) => {
                             if (err){
                                 return reject(Report.getReport({isSuccess: false, message: `Failed to read the directory ${path}`}));
                             }
                             for (let file of files){
-                                let child = await MyNode.load(p.join(path, file), node);
-                                node.children_.push(child);
+                                await MyNode.load(p.join(path, file), node);
                             }
                             return resolve(node);
                         });
@@ -109,7 +111,7 @@ export class MyNode {
                     // Create FsObj
                     await node.createFsObj();
                     // add him self as new child of the parent folder
-                    parent.getChildren().push(node);
+                    parent.addChild(node)
                     
                     return resolve(node);
                 }
@@ -170,6 +172,11 @@ export class MyNode {
         return this.children_;
     }
 
+    public addChild(node: MyNode){
+        if (!this.children_.some(child => child.getPath() === node.getPath()))
+            this.children_.push(node);
+    }
+
     public isFile(): boolean {
         return this.getType() === NodeType.FILE;
     }
@@ -217,21 +224,19 @@ export class MyNode {
      */
      public delete(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            fs.unlink(this.path_, err => {
-                if (err){
-                    resolve(false);
-                }
+            try {
+                fs.rmSync(this.path_, {recursive: true})
                 // Remove him self from the current parent
                 let parent = this.getParent();
                 if (parent !== null){
                     let index = parent.getChildren().map(child => child.getName()).indexOf(this.getName());
-                    parent.getChildren().splice(index, 1);
+                    if (index >= 0)
+                        parent.getChildren().splice(index, 1);
                 }
-                // Reset attributes
-                this.children_ = [];
-                this.parent_ = null;
                 resolve(true);
-            });
+            } catch (err) {
+                resolve(false);
+            }
         });
     }
 
@@ -250,7 +255,8 @@ export class MyNode {
             let parent = this.getParent();
             if (parent !== null){
                 let index = parent.getChildren().map(child => child.getName()).indexOf(this.getName());
-                parent.getChildren().splice(index, 1);
+                if (index >= 0)
+                    parent.getChildren().splice(index, 1);
             }
             // Move the FsObj with the fileSystem into the dest folder
             let newPath = p.join(dest.getPath(), this.getName());
@@ -259,7 +265,7 @@ export class MyNode {
                     return reject(Report.getReport({isSuccess: false, message: `Failed to move ${this.path_} to ${dest.getPath()}`}));
                 }
                 // Add him self as new child of the dest folder
-                dest.getChildren().push(this);
+                dest.addChild(this);
                 // update his path and his parent
                 this.parent_ = dest;
                 this.path_ = newPath;

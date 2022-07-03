@@ -4,7 +4,7 @@ import { Report } from "../../src/shared/report";
 import { FeatureParams } from "./entity/feature";
 import { F_ProjectFrom, MyProject } from "./entity/project";
 import ProjectService from "./services/projectService";
-
+import { ProjectWatcher } from "./services/watchService";
 
 class MyIde {
 
@@ -26,8 +26,12 @@ class MyIde {
      */
     public async openProject(path: string): Promise<Report<F_Project>> {
         try {
+            if (ProjectWatcher.current_watcher){
+                ProjectWatcher.current_watcher.close()
+            }
             let project = await this.projectService.load(path);
             this.curr_project = project;
+            ProjectWatcher.current_watcher = new ProjectWatcher(this.curr_project)
 
             return Report.getReport({
                 isSuccess: true,
@@ -42,9 +46,6 @@ class MyIde {
             throw err;
         }
     }
-
-
-
 }
 
 export default new MyIde();

@@ -3,8 +3,10 @@ import { Project } from "./Project";
 export class Ide {
 
     // Singleton
-    private static instance: Ide;
+    private static instance: Ide | null = null;
     public static getInstance(): Ide {
+        if (!Ide.instance)
+            throw new Error("Ide instance null");
         return Ide.instance;
     }
 

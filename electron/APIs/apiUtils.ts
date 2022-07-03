@@ -8,6 +8,10 @@ export interface ApiComponent<EntriesType, ReportType> {
     on(listener: (report: Report<ReportType>) => void): void;
 }
 
+export interface ApiComponentOneWay<ReportType> {
+    on(listener: (report: Report<ReportType>) => void): void;
+}
+
 /**
  * Envoie de la data au backend et renvoie la reponse
  */

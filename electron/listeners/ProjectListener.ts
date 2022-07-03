@@ -49,3 +49,21 @@ on<SaveFileParams, void>("saveFile", async (param) => {
     let report = await controller.saveFile(param.filePath, param.content);
     return report;
 })
+
+// Delete File
+export interface DeleteFileParams {
+    filePath: string
+}
+on<DeleteFileParams, string>("deleteFile", async (param) => {
+    let report = await controller.deleteFile(param.filePath)
+    return report;
+})
+
+// Delete File
+export interface DeleteFolderParams {
+    folderPath: string
+}
+on<DeleteFolderParams, string>("deleteFolder", async (param) => {
+    let report = await controller.deleteFolder(param.folderPath)
+    return report;
+})
