@@ -40,20 +40,29 @@ class ProjectWindow extends React.Component<ProjectWindowProps, ProjectWindowSta
 
     render() {
         
-
+        let content = (<>
+            <span>No Project</span>
+        </>);
+        if (this.props.rootNode !== null){
+            content = (
+                <>
+                    {this.props.rootNode ? (<ProjectHeader 
+                        name = {this.props.rootNode.name}
+                        onNewFileClick = {() => this.onNewFileClicked()}/>) : null}
+                    {this.props.rootNode ? (
+                    <Tree 
+                        ref={this.rootNode_ref}
+                        node={this.props.rootNode}
+                        padding={0}
+                        selectedNode={this.props.selectedNode}
+                    />) : null}
+                </>
+            )
+        }
 
         return (
             <div className="projectWindow">
-                {this.props.rootNode ? (<ProjectHeader 
-                    name = {this.props.rootNode.name}
-                    onNewFileClick = {() => this.onNewFileClicked()}/>) : null}
-                {this.props.rootNode ? (
-                <Tree 
-                    ref={this.rootNode_ref}
-                    node={this.props.rootNode}
-                    padding={0}
-                    selectedNode={this.props.selectedNode}
-                />) : null}
+                {content}
             </div>
         );
     }

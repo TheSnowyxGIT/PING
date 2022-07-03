@@ -69,6 +69,7 @@ class Main extends React.Component<MainProps, MainState> {
       }
     }
 
+    // only from external tools
     onFileContentChanged(report: Report<string>) {
       if (!report.isSuccess){
         AlertQueue.showReport("File changed", report);

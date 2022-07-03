@@ -3,7 +3,22 @@ import { Ide } from "./Ide";
 
 export enum CategoryMenuType {
     FileExplorer,
-    TAMERE
+}
+
+export interface CategoryData {
+    title: string
+}
+
+export function getCategoryData(category: CategoryMenuType): CategoryData{
+    if (category === CategoryMenuType.FileExplorer){
+        return {
+            title: "Explorator"
+        }
+    } else {
+        return {
+            title: "UNKNOWN"
+        }
+    }
 }
 
 
@@ -17,7 +32,7 @@ export class CategoryMenu {
 
 
     // attributes
-    private category_selected: CategoryMenuType = CategoryMenuType.TAMERE;
+    private category_selected: CategoryMenuType = CategoryMenuType.FileExplorer;
 
     constructor(){
         if (CategoryMenu.instance){

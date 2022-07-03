@@ -1,7 +1,9 @@
 import React, { ReactElement } from "react";
 import ProjectWindow from "./ProjectWindow/ProjectWindow";
 import {Project} from "../classes/Project"
-import { CategoryMenuType } from "../classes/CategoryMenu";
+import { CategoryMenuType, getCategoryData } from "../classes/CategoryMenu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 interface ControllerWindowProps {
     project: Project | null,
@@ -19,6 +21,7 @@ class ControllerWindow extends React.Component<ControllerWindowProps, Controller
     }
     render() { 
         const projectOpened = this.props.project;
+        const categoryData = getCategoryData(this.props.category);
 
         let activeWindow: ReactElement | null  = null;
         switch (this.props.category) {
@@ -34,6 +37,12 @@ class ControllerWindow extends React.Component<ControllerWindowProps, Controller
 
         return (
             <div className="controllerWindow">
+                <div className="header">
+                    <span>{categoryData.title}</span>
+                    <div className="options">
+                        <FontAwesomeIcon icon={faEllipsis}/>
+                    </div>
+                </div>
                 {activeWindow}
             </div>
         );
