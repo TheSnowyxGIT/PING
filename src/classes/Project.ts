@@ -89,8 +89,14 @@ export class Project implements F_Project {
     // add node to tree
     public addNode(node: F_Node, update: boolean = true): boolean {
       let path = node.relativePath.split(window.libraries.path.sep);
+      if (this.rootNode.getChild(node.relativePath.split(window.libraries.path.sep))){
+        return false;
+      }
       path.pop();
       let parent = this.rootNode.getChild(path);
+      if (path.length === 0){
+        parent = this.rootNode;
+      }
       if (parent == null)
         return false;
       let newNode = FileNode.of(node);
@@ -100,4 +106,18 @@ export class Project implements F_Project {
       update && Ide.getInstance().updateReact();
       return true;
     }
+
+    // remove node if exists
+    public removeNode(relativePath: string, update: boolean = true): boolean {
+      let path_splited = relativePath.split(window.libraries.path.sep);
+      let node = this.rootNode.getChild(path_splited);
+      if (!node){
+        return false;
+      }
+      node.remove(false);
+      // update React
+      update && Ide.getInstance().updateReact();
+      return true;
+    }
+
 }

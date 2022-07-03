@@ -13,6 +13,7 @@ export class FileEdit {
     private isModified = false;
     private content: string;
 
+
     // Contructor
     constructor(file: FileNode, content: string){
         this.file = file;
@@ -43,5 +44,18 @@ export class FileEdit {
         })
     }
 
+    public async onExternalContent(){
+        if (this.isModified){
+
+        } else {
+            const report = await window.project.getContentFile.syncSend({filePath: this.file.relativePath})
+            if (!report.isSuccess){
+                AlertQueue.showReport("Load Content of file", report);
+            } else if (report.data){
+                this.content = report.data;
+            }
+        }
+        Ide.getInstance().updateReact();
+    }
     
 }

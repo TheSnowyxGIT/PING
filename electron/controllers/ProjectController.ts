@@ -190,3 +190,79 @@ export async function saveFile(filePath: string, content: string): Promise<Repor
     }
    
 }
+
+export async function deleteFile(filepath: string): Promise<Report<string>> {
+    let project = myide.getCurrentProject();
+
+    if (project === null) {
+        return Report.getReport({
+            isSuccess: false,
+            message: `There is no project opened.`
+        })
+    }
+
+    let nodeService = project.getNodeService();
+
+    let fileNode = project.getRootNode().findChildRec(filepath);
+    if (fileNode === null){
+        return Report.getReport({
+            isSuccess: false,
+            message: `The path ${filepath} is invalid.`
+        })
+    } else if (!fileNode.isFile()){
+        return Report.getReport({
+            isSuccess: false,
+            message: `The path ${filepath} need to be a file.`
+        });
+    }
+    try {
+        await nodeService.delete(fileNode)
+        return Report.getReport<string>({
+            isSuccess: true,
+            data: filepath
+        });
+    } catch (error) {
+        if (error instanceof Report){
+            return error;
+        }
+        throw error;
+    }
+}
+
+export async function deleteFolder(folderpath: string): Promise<Report<string>> {
+    let project = myide.getCurrentProject();
+
+    if (project === null) {
+        return Report.getReport({
+            isSuccess: false,
+            message: `There is no project opened.`
+        })
+    }
+
+    let nodeService = project.getNodeService();
+
+    let folderNode = project.getRootNode().findChildRec(folderpath);
+    if (folderNode === null){
+        return Report.getReport({
+            isSuccess: false,
+            message: `The path ${folderNode} is invalid.`
+        })
+    } else if (!folderNode.isFolder()){
+        return Report.getReport({
+            isSuccess: false,
+            message: `The path ${folderNode} need to be a folder.`
+        });
+    }
+    try {
+        await nodeService.delete(folderNode)
+        return Report.getReport<string>({
+            isSuccess: true,
+            data: folderpath
+        });
+    } catch (error) {
+        if (error instanceof Report){
+            return error;
+        }
+        throw error;
+    }
+}
