@@ -14,6 +14,7 @@
         "@types/node": "^16.11.41",
         "@types/react": "^18.0.14",
         "@types/react-dom": "^18.0.5",
+        "crates.io": "^2.2.1",
         "chokidar": "^3.5.3",
         "electron": "^19.0.6",
         "lookpath": "^1.2.2",

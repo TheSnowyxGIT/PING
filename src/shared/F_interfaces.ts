@@ -15,3 +15,14 @@ export interface F_Project {
     rootNode: F_Node,
     aspects: F_Aspect[]
 };
+
+export interface F_CratesObj
+{
+    id: string
+    lastestVersion: string
+}
+
+export interface F_CratesDependencies {
+    cratesList: F_CratesObj[]   
+    lastPage: number
+}
