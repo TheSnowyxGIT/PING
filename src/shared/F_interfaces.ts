@@ -16,9 +16,13 @@ export interface F_Project {
     aspects: F_Aspect[]
 };
 
-export interface F_CratesDependency {
+export interface F_CratesObj
+{
     id: string
     lastestVersion: string
-    currentPage: number
-    isLastPage: boolean
+}
+
+export interface F_CratesDependencies {
+    cratesList: F_CratesObj[]   
+    lastPage: number
 }

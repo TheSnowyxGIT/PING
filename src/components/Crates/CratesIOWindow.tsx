@@ -12,9 +12,9 @@ interface CratesIOWindowProps {
 interface CratesIOWindowState {
     cratesDependencies: CratesDependency[];
     firstTime: boolean;
-    depName: string;
+    depName: string; //Input currently in the search bar
     pageId: number;
-    lastPage: boolean;
+    lastPage: number;
     waitForResponse: boolean;
 }
 
@@ -26,7 +26,7 @@ class CratesIOWindow extends React.Component<CratesIOWindowProps, CratesIOWindow
             firstTime: true,
             depName: "",
             pageId: 1,
-            lastPage: false,
+            lastPage: 0,
             waitForResponse: true
         }
     }
@@ -47,9 +47,11 @@ class CratesIOWindow extends React.Component<CratesIOWindowProps, CratesIOWindow
                 AlertQueue.sendAlert({ time: 3000, type: AlertType.ERROR, title: "Display dependencies", content: report.message || "unknown" });
             if (report.data !== null && report.data !== undefined)
                 this.setState({
-                    cratesDependencies: report.data.map(cratesDep => {
+                    cratesDependencies: report.data.cratesList.map(cratesDep => {
                         return CratesDependency.of(cratesDep);
-                    })
+                    }),
+                    lastPage: report.data.lastPage
+                    
                 })
         })
     }
@@ -66,9 +68,10 @@ class CratesIOWindow extends React.Component<CratesIOWindowProps, CratesIOWindow
                 AlertQueue.sendAlert({ time: 3000, type: AlertType.ERROR, title: "Display dependencies", content: report.message || "unknown" });
             if (report.data !== null && report.data !== undefined)
                 this.setState({
-                    cratesDependencies: report.data.map(cratesDep => {
+                    cratesDependencies: report.data.cratesList.map(cratesDep => {
                         return CratesDependency.of(cratesDep);
-                    })
+                    }),
+                    lastPage : report.data.lastPage
                 })
         })
     }
@@ -94,18 +97,20 @@ class CratesIOWindow extends React.Component<CratesIOWindowProps, CratesIOWindow
                         pageId: 1
                     });
                 }} />
-                <button className="prev-page" disabled={this.state.waitForResponse} onClick={() => {
+                <button className="prev-page" disabled={this.state.waitForResponse} hidden={this.state.depName === "" || this.state.pageId === 1} onClick={() => {
                     this.setState({
                         pageId: this.state.pageId - 1
                     });
                     this.getDependencies(this.state.depName, this.state.pageId)
-                }}>Prev.</button>
-                <button className="next-page" disabled={this.state.waitForResponse} onClick={() => {
+                }}>Prec.</button>
+                <button className="next-page" disabled={this.state.waitForResponse} hidden={ this.state.depName === "" || this.state.lastPage < this.state.pageId} onClick={() => {
+                    console.log(this.state.lastPage)
                     this.setState({
                         pageId: this.state.pageId + 1
                     });
                     this.getDependencies(this.state.depName, this.state.pageId)
                 }}>Suiv.</button>
+                <h1>pages: {this.state.pageId}/{this.state.lastPage + 1}</h1> 
                 <div className="dependency-boxs">
                     {
                         this.state.cratesDependencies.map(dependency => {
