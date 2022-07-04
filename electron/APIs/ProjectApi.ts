@@ -1,8 +1,8 @@
 import {ipcRenderer} from "electron"
 import { F_Node, F_Project } from "../../src/shared/F_interfaces";
-import { CreateFileParams, CreateFolderParams, GetContentParams, SaveFileParams } from "../listeners/ProjectListener";
+import { CreateFileParams, CreateFolderParams, DeleteFileParams, DeleteFolderParams, GetContentParams, SaveFileParams } from "../listeners/ProjectListener";
 import { Report } from "../../src/shared/report";
-import { ApiComponent, AsyncSend, SyncSend } from "./apiUtils";
+import { ApiComponent, ApiComponentOneWay, AsyncSend, SyncSend } from "./apiUtils";
 
 // Open Project
 export const openProject: ApiComponent<void, F_Project> = {
@@ -116,6 +116,61 @@ export const savefile: ApiComponent<{filePath: string, content: string}, void> =
 
     on: function (listener: (report: Report<void>) => void): void {
         ipcRenderer.on("saveFile", (_, report: Report<void>) => {
+            listener(report);
+        })
+    }
+}
+
+// Delete File
+export const deleteFile: ApiComponent<{filePath: string}, string> = {
+
+    syncSend: async function (data): Promise<Report<string>> {
+        const report = await SyncSend<DeleteFileParams, string>("deleteFile", {
+            filePath: data.filePath
+        });
+        return report;
+    },
+
+    asyncSend: function (data): void {
+        AsyncSend<DeleteFileParams>("deleteFile", {
+            filePath: data.filePath
+        });
+    },
+
+    on: function (listener: (report: Report<string>) => void): void {
+        ipcRenderer.on("deleteFile", (_, report: Report<string>) => {
+            listener(report);
+        })
+    }
+}
+
+// Delete Folder
+export const deleteFolder: ApiComponent<{folderpath: string}, string> = {
+
+    syncSend: async function (data): Promise<Report<string>> {
+        const report = await SyncSend<DeleteFolderParams, string>("deleteFolder", {
+            folderPath: data.folderpath
+        });
+        return report;
+    },
+
+    asyncSend: function (data): void {
+        AsyncSend<DeleteFolderParams>("deleteFolder", {
+            folderPath: data.folderpath
+        });
+    },
+
+    on: function (listener: (report: Report<string>) => void): void {
+        ipcRenderer.on("deleteFolder", (_, report: Report<string>) => {
+            listener(report);
+        })
+    }
+}
+
+// File changed
+export const fileChange: ApiComponentOneWay<string> = {
+    on: function (listener: (report: Report<string>) => void): void {
+        ipcRenderer.on("fileChange", (_, report: Report<string>) => {
             listener(report);
         })
     }

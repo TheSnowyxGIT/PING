@@ -5,9 +5,13 @@
 @import "./components/project-header";
 @import "./pages//main.scss";
 @import "./components/projectWindow";
+@import "./components/controllerWindow.scss";
 // FilesHeader
 @import "components/FilesHeader/fileBox";
 @import "components/FilesHeader/filesHeader";
 
 @import "components/cratesDependencyBox";
 @import "components/cratesIOWindow";
+// Left Menu
+@import "components/LeftMenu/leftMenu";
+@import "components/LeftMenu/menuItem";

@@ -2,6 +2,7 @@ import { MyNode } from "../entity/node"
 import * as fs from "fs";
 import { NodeType } from "../../../src/shared/ideEnums";
 import { Report } from "../../../src/shared/report";
+import * as p from "path"
 
 export default class NodeService {
 
@@ -89,7 +90,7 @@ export default class NodeService {
     public async delete(node: MyNode): Promise<boolean> {
         return await node.delete();
     }
-
+    
     /**
     * Create a new node.
     *
@@ -118,4 +119,6 @@ export default class NodeService {
     public async move(nodeToMove: MyNode, destinationFolder: MyNode): Promise<MyNode> {
         return await nodeToMove.move(destinationFolder);
     }
+
+    
 }

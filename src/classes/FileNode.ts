@@ -54,6 +54,19 @@ export class FileNode implements F_Node{
     return null;
   }
 
+  // Remove in front
+  public remove(update: boolean = true){
+    // Remove him self from the current parent
+    let parent = this.parent;
+    if (parent !== null){
+        let index = parent.children.map(child => child.name).indexOf(this.name);
+        if (index >= 0)
+            parent.children.splice(index, 1);
+    }
+    // Update react
+    update && Ide.getInstance().updateReact();
+  }
+
   public equals(node: FileNode): boolean{
     return this.relativePath === node.relativePath;
   }

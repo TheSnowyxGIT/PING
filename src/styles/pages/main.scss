@@ -5,6 +5,7 @@
     height: 100vh;
     >.left {
         flex: 0 0 auto;
+        display: flex;
     }
     >.right {
         flex: 1 1 auto;
@@ -13,7 +14,7 @@
         .emptyProject {
             width: 100%;
             height: 100%;
-            background: #0D1117;
+            background: $dark2;
             color: $white1;
             display: flex;
             justify-content: center;

@@ -1,10 +1,13 @@
+import { CategoryMenu } from "./CategoryMenu";
 import { Project } from "./Project";
 
 export class Ide {
 
     // Singleton
-    private static instance: Ide;
+    private static instance: Ide | null = null;
     public static getInstance(): Ide {
+        if (!Ide.instance)
+            throw new Error("Ide instance null");
         return Ide.instance;
     }
 
@@ -12,6 +15,8 @@ export class Ide {
     public updateReact: () => void = () => {};
     // attributes
     public opened_project: Project | null = null;
+    public categoryMenu = new CategoryMenu();
+
 
     // Constructor
     constructor(updateReact: () => void){
