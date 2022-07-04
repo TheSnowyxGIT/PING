@@ -1,3 +1,4 @@
+import { F_Dependency } from "../../../../src/shared/F_interfaces";
 import { AspectType, FeatureType } from "../../../../src/shared/ideEnums";
 import { Report } from "../../../../src/shared/report";
 import { exists_script, run_script } from "../../../utils/runScripts";
@@ -6,25 +7,14 @@ import { FeatureParams, Feature_ } from "../feature";
 import { MyProject } from "../project";
 
 
-class CargoBuild implements Feature_ {
+class GetInstalled implements Feature_ {
 
-    async execute(project: MyProject, params: FeatureParams<null>): Promise<Report<null>> {
-        let rootNode = project.getRootNode();
-
-        let report = await run_script("cargo", ["build"], rootNode.getPath(), {
-            stderr: params.errCallback,
-            stdout: params.outCallback
-        });
-        
-        return Report.getReport({
-            isSuccess: report.code === 0,
-            err: report.stderr,
-            out: report.stdout
-        });
+    async execute(project: MyProject, params: FeatureParams<null>): Promise<Report<F_Dependency[]>> {
+       
     }
 
     type(): FeatureType {
-        return FeatureType.CARGO_BUILD;
+        return FeatureType.CRATES_GET_DEPENDENCIES;
     }
     
 }
@@ -32,24 +22,24 @@ class CargoBuild implements Feature_ {
 /**
  * ASPECT Cargo
  */
-export default class Cargo implements Aspect_ {
+export default class CratesIO implements Aspect_ {
     /**
      * List of all features of this Aspect
      */
     private static features_: Feature_[] = [
-        new CargoBuild()
+        new GetInstalled()
     ]
 
     getType(): AspectType {
-        return AspectType.CARGO;
+        return AspectType.CRATES;
     }
 
     getName(): string {
-        return "Cargo";
+        return "CRATES";
     }
 
     getFeatureList(): Feature_[] {
-        return Cargo.features_;
+        return CratesIO.features_;
     }
 
     async checkActive(project: MyProject): Promise<boolean> {

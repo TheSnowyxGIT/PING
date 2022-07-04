@@ -1,6 +1,7 @@
 import React from "react";
 import { threadId } from "worker_threads";
 import { CratesDependency } from "../../classes/CratesDependency";
+import { CratesManager } from "../../classes/CratesManager";
 import { AlertType } from "../Alerts/Alert";
 import AlertQueue from "../Alerts/AlertQueue";
 import CratesDependencyBox from "./CratesDependencyBox";
@@ -116,7 +117,11 @@ class CratesIOWindow extends React.Component<CratesIOWindowProps, CratesIOWindow
                         this.state.cratesDependencies.map(dependency => {
                             return <CratesDependencyBox
                                 dependency={dependency}
-                                onDownload={() => console.log(dependency.id + "  dl click")} />
+                                installed = {CratesManager.getInstance().getInstalledDependencies().some(iDep => iDep.id === dependency.id)}
+                                onDownload={() => CratesManager.getInstance().addInstalledDependency({
+                                    id: dependency.id,
+                                    version: dependency.lastestVersion
+                                })} />
                         })
                     }
                 </div>

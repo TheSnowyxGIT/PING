@@ -4,6 +4,7 @@ import {Project} from "../classes/Project"
 import { CategoryMenuType, getCategoryData } from "../classes/CategoryMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import CratesIOWindow from "./Crates/CratesIOWindow";
 
 interface ControllerWindowProps {
     project: Project | null,
@@ -30,6 +31,9 @@ class ControllerWindow extends React.Component<ControllerWindowProps, Controller
                     rootNode={projectOpened ? projectOpened.rootNode : null}
                     selectedNode={projectOpened ? projectOpened.selectedNode : null}
                 />
+                break;
+            case CategoryMenuType.CratesIO:
+                activeWindow = <CratesIOWindow />
                 break;
             default:
                 break;

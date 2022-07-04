@@ -26,3 +26,8 @@ export interface F_CratesDependencies {
     cratesList: F_CratesObj[]   
     lastPage: number
 }
+
+export interface F_Dependency{
+    id: string
+    version: string
+}

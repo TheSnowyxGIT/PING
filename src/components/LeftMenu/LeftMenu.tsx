@@ -22,6 +22,9 @@ class LeftMenu extends React.Component<LeftMenuProps, LeftMenuState> {
                 <MenuItem icon={faAngleDoubleRight} onClick={()=>{
                     CategoryMenu.getInstance().select(CategoryMenuType.FileExplorer)
                 }}/>
+                <MenuItem icon={faAngleDoubleRight} onClick={()=>{
+                    CategoryMenu.getInstance().select(CategoryMenuType.CratesIO)
+                }}/>
             </div>
          );
     }

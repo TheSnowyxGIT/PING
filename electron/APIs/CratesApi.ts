@@ -1,5 +1,5 @@
 import {ipcRenderer} from "electron"
-import {  F_CratesDependencies, F_Node, F_Project } from "../../src/shared/F_interfaces";
+import {  F_CratesDependencies, F_Dependency, F_Node, F_Project } from "../../src/shared/F_interfaces";
 import { CreateFileParams, CreateFolderParams, GetContentParams, SaveFileParams } from "../listeners/ProjectListener";
 import { Report } from "../../src/shared/report";
 import { ApiComponent, AsyncSend, SyncSend } from "./apiUtils";

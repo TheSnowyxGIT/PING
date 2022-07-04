@@ -14,8 +14,8 @@
         "@types/node": "^16.11.41",
         "@types/react": "^18.0.14",
         "@types/react-dom": "^18.0.5",
-        "crates.io": "^2.2.1",
         "chokidar": "^3.5.3",
+        "crates.io": "^2.2.1",
         "electron": "^19.0.6",
         "lookpath": "^1.2.2",
         "node-sass": "^7.0.1",
@@ -25,6 +25,7 @@
         "react-icons": "^4.4.0",
         "react-scripts": "^5.0.1",
         "styled-components": "^5.3.5",
+        "toml": "^3.0.0",
         "typescript": "^4.7.4",
         "web-vitals": "^2.1.4"
     },

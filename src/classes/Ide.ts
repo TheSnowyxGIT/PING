@@ -1,4 +1,5 @@
 import { CategoryMenu } from "./CategoryMenu";
+import { CratesManager } from "./CratesManager";
 import { Project } from "./Project";
 
 export class Ide {
@@ -16,7 +17,7 @@ export class Ide {
     // attributes
     public opened_project: Project | null = null;
     public categoryMenu = new CategoryMenu();
-
+    public cratesManager = new CratesManager();
 
     // Constructor
     constructor(updateReact: () => void){
