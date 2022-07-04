@@ -92,14 +92,14 @@ class Main extends React.Component<MainProps, MainState> {
     /* ---/Listeners--- */
 
     // Set All listeners
-    /*componentDidMount(){
+   componentDidMount(){
       window.project.openProject.on((report) => this.onProjectOpened(report));
       window.project.createFile.on((report) => this.onFileCreated(report));
       window.project.createFolder.on((report) => this.onFolderCreated(report));
       window.project.deleteFile.on((report) => this.onFileDeleted(report));
       window.project.deleteFolder.on((report) => this.onFolderDeleted(report));
       window.project.fileChange.on((report) => this.onFileContentChanged(report));
-    }*/
+    }
   
     render() { 
         const projectOpened = this.state.ide.opened_project;
