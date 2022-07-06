@@ -23,6 +23,7 @@ export class MyNode {
     private parent_: MyNode | null;
     private name_: string;
 
+
     /**
      * @param path The Path of the Node to load (non empty file/Folder/..)
      * @param parent Parent Folder Node, null if you want this Node to be the root
@@ -30,43 +31,64 @@ export class MyNode {
      * @throws {Report | Error}
      */
     public static load(path: string, parent: MyNode | null): Promise<MyNode> {
-        return new Promise((resolve, reject) => {
-            fs.access(path, fs.constants.F_OK, err => {
-                if (err){
-                    return reject(Report.getReport({isSuccess: false, message: `Cannot access to the given path ${path}`}));
+        return new Promise(async (resolve, reject) => {
+            let rootNode: MyNode;
+            let queue = [{parent: parent, path: path}];
+            while (queue.length > 0){
+                let promises: Promise<{stat: fs.Stats, path: string, parent: MyNode | null} | null>[] = []
+                for (let cur_elt of queue){
+                    promises.push(new Promise((resolve, _) => {
+                        fs.stat(cur_elt.path, (err, stat) => {
+                            if (err){
+                                return resolve(null);
+                            }
+                            resolve({stat: stat, path: cur_elt.path, parent: cur_elt.parent});
+                        });
+                    }))
                 }
-                fs.lstat(path, (err, stat) => {
-                    if (err){
-                        return reject(Report.getReport({isSuccess: false, message: `Lstat failed for the given path ${path}`}));
+                const files_data = await Promise.all(promises);
+                queue = []
+                let promises2: Promise<{parent: MyNode | null, paths: string[]} | null>[] = [];
+                for (let file_data of files_data){
+                    if (file_data === null){
+                        continue;
                     }
                     let type = NodeType.OTHER;
-                    if (stat.isFile())
+                    if (file_data.stat.isFile())
                         type = NodeType.FILE;
-                    if (stat.isDirectory())
+                    if (file_data.stat.isDirectory())
                         type = NodeType.FOLDER;
-                    let name = p.basename(path);
+                    let name = p.basename(file_data.path);
                     let relativePath = "";
-                    if (parent !== null)
-                        relativePath = p.join(parent.getRelativePath(), name);
-                    let node = new MyNode(name, path, relativePath, type, parent);
-                    if (parent){
-                        parent.addChild(node);
+                    if (file_data.parent !== null)
+                        relativePath = p.join(file_data.parent.getRelativePath(), name);
+                    let node = new MyNode(name, file_data.path, relativePath, type, file_data.parent);
+                    if (rootNode === undefined){
+                        rootNode = node;
+                    }
+                    if (file_data.parent){
+                        file_data.parent.addChild(node);
                     }
                     if (type === NodeType.FOLDER){
-                        fs.readdir(path, async (err, files) => {
-                            if (err){
-                                return reject(Report.getReport({isSuccess: false, message: `Failed to read the directory ${path}`}));
-                            }
-                            for (let file of files){
-                                await MyNode.load(p.join(path, file), node);
-                            }
-                            return resolve(node);
-                        });
-                    } else {
-                        return resolve(node);
+                       promises2.push(new Promise((resolve, _) => {
+                            fs.readdir(file_data.path, (err, files) => {
+                                if (err){
+                                    return resolve(null);
+                                }
+                                resolve({parent: node, paths: files.map(file => p.join(file_data.path, file))})
+                            })
+                       }))
                     }
-                });
-            })
+                }
+                const subfilesPerParent = await Promise.all(promises2);
+                for (let subfiles of subfilesPerParent){
+                    if (subfiles === null){
+                        continue;
+                    }
+                    queue = queue.concat(subfiles.paths.map(subfile => {return {parent: subfiles.parent, path: subfile}}))
+                }
+            }
+            resolve(rootNode);
         })
     }
 

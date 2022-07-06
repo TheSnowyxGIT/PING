@@ -15,8 +15,14 @@ class MyIde {
         return this.curr_project;
     }
 
-    public executeFeature<ParamsType>(feature: FeatureType, params: FeatureParams<ParamsType>): Promise<Report<unknown>> {
-        return this.projectService.execute(this.getCurrentProject(), feature, params);
+    public async executeFeature<ParamsType>(feature: FeatureType, params: FeatureParams<ParamsType>): Promise<Report<unknown>> {
+        if (this.getCurrentProject() === null){
+            return Report.getReport<unknown>({
+                isSuccess: false,
+                message: "There is no project opened."
+            });
+        }
+        return await this.projectService.execute(this.getCurrentProject(), feature, params);
     }
 
     /**

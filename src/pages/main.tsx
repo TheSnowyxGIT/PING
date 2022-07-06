@@ -1,4 +1,5 @@
 import React from "react";
+import { CategoryMenu } from "../classes/CategoryMenu";
 import { FileNode } from "../classes/FileNode";
 import { Ide } from "../classes/Ide";
 import { Project } from "../classes/Project";
@@ -7,6 +8,8 @@ import ControllerWindow from "../components/ControllerWindow";
 import EditorContainer from "../components/EditorContainer/EditorContainer";
 import LeftMenu from "../components/LeftMenu/LeftMenu";
 import ProjectWindow from "../components/ProjectWindow/ProjectWindow";
+import { Terminal } from "../components/Terminal/Terminal";
+import TerminalWindow from "../components/Terminal/TerminalWindow";
 import { F_Node, F_Project } from "../shared/F_interfaces";
 import { Report } from "../shared/report";
 
@@ -107,6 +110,8 @@ class Main extends React.Component<MainProps, MainState> {
         const selectedFile = projectOpened?.selectedFile ?  projectOpened.selectedFile : null;
         const categoryMenu = this.state.ide.categoryMenu;
 
+        const terminalOpened: boolean = this.state.ide.featureExecutor.getTerminalOpened();
+        
         return (
           <div className="container">
             <div className="left">
@@ -119,6 +124,7 @@ class Main extends React.Component<MainProps, MainState> {
                   selectedFile={selectedFile}
                   isProjectOpened={projectOpened !== null}
                 />
+                {terminalOpened ? <TerminalWindow/> : null}
             </div>
         </div>
         );

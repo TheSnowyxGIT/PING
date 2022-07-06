@@ -1,5 +1,7 @@
-import { AspectType } from "../shared/ideEnums";
+import TerminalWindow from "../components/Terminal/TerminalWindow";
 import { CategoryMenu } from "./CategoryMenu";
+import { FeatureExecutor } from "./FeatureExecutor";
+import { AspectType } from "../shared/ideEnums";
 import { CratesManager } from "./CratesManager";
 import { Project } from "./Project";
 
@@ -18,6 +20,9 @@ export class Ide {
     // attributes
     public opened_project: Project | null = null;
     public categoryMenu = new CategoryMenu();
+    public featureExecutor = new FeatureExecutor();
+    // init component
+    private terminalWindow = new TerminalWindow({});
     public cratesManager = new CratesManager();
 
     // Constructor

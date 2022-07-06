@@ -37,18 +37,26 @@ class EditorContainer extends React.Component<EditorContainerProps, EditorContai
         const selectedFileEdit = this.findFileEdit(this.props.selectedFile);
 
         return (
-            <>
+            this.props.isProjectOpened ? 
+            (<div className="editor-container">
                 <FilesHeader 
                     openedFiles={this.props.files.map(fileEdit => fileEdit)}
                     selectedFile={this.props.selectedFile}
                 />
                 {selectedFileEdit ? (<Editor 
                     fileEdit={selectedFileEdit} 
-                />) : (<div className="emptyProject">
-                    {!this.props.isProjectOpened ? <h1>No Opened Project</h1> : null}
+                />) : 
+                    <div className="emptyProject">
+                        <h1>No file opened</h1>
+                    </div>
+                }
+            </div>)
+            :
+            <div className="editor-container">
+                <div className="emptyProject">
+                    <h1>No Opened Project</h1>
                 </div>
-                )}
-            </>
+            </div>
         );
     }
 }
