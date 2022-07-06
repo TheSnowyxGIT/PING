@@ -6,7 +6,6 @@ import { FeatureParams, Feature_ } from "../feature";
 import { MyProject } from "../project";
 
 
-
 class CargoBuild implements Feature_ {
 
     async execute(project: MyProject, params: FeatureParams<null>): Promise<Report<null>> {

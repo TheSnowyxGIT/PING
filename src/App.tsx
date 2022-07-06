@@ -9,7 +9,7 @@ interface AppProps {
  
 interface AppState {
 }
- 
+
 class App extends React.Component<AppProps, AppState> {
 
   constructor(props: AppProps) {
@@ -23,7 +23,7 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <div className="App">
         <AlertQueue />
-        <CratesIOWindow />
+        <Main/>
       </div>
     );
   }
