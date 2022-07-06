@@ -1,0 +1,40 @@
+.terminal-wrapper {
+    background: $dark1;
+    font-size: 20px;
+    padding: 20px;
+    height: 100%;
+    position: relative;
+    .terminal {
+        height: 100%;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+    }
+    .terminal-hidden-input {
+        display: none;
+    }
+}
+
+.terminal-line {
+    color: $white1;
+    &::before {
+        content: "";
+        display: inline-block;
+        color: darken($white1, 10%);
+        vertical-align: middle;
+    }
+    &.terminal-input::before {
+        margin-right: 0.75em;
+        content: "$";
+    }
+    &.terminal-input[data-prompt]::before {
+        content: attr(data-prompt);
+    }
+    &.terminal-input-active {}
+    &.terminal-stderr {
+        color: red
+    }
+    &.terminal-stdout {
+        color: green
+    }
+}

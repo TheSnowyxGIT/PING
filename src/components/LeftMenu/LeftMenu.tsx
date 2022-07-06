@@ -1,6 +1,6 @@
 import React from "react";
 import MenuItem from "./MenuItem";
-import {faAngleDoubleRight} from "@fortawesome/free-solid-svg-icons"
+import {faAngleDoubleRight, faArrowAltCircleDown} from "@fortawesome/free-solid-svg-icons"
 import { CategoryMenu, CategoryMenuType } from "../../classes/CategoryMenu";
 
 interface LeftMenuProps {
@@ -21,6 +21,9 @@ class LeftMenu extends React.Component<LeftMenuProps, LeftMenuState> {
             <div className="leftMenu">
                 <MenuItem icon={faAngleDoubleRight} onClick={()=>{
                     CategoryMenu.getInstance().select(CategoryMenuType.FileExplorer)
+                }}/>
+                <MenuItem icon={faArrowAltCircleDown} onClick={()=>{
+                    CategoryMenu.getInstance().select(CategoryMenuType.Cargo)
                 }}/>
             </div>
          );

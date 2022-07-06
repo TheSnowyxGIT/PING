@@ -1,7 +1,6 @@
 import React, {MouseEvent, useEffect } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faChevronRight, faChevronDown, faFolder, faFile} from "@fortawesome/free-solid-svg-icons"
-import { HighlightSpanKind } from "typescript";
 import { FileNode } from "../../classes/FileNode";
 import { NodeType } from "../../shared/ideEnums";
 import { Ide } from "../../classes/Ide";

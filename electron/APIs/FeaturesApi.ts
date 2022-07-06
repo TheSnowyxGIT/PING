@@ -3,12 +3,8 @@ import { ExecFeatureParams } from "../listeners/FeaturesListener";
 import { FeatureType } from "../../src/shared/ideEnums";
 import { Report } from "../../src/shared/report";
 import { RequestOptions } from "../listeners/listener";
+import { FeatureFrontParams } from "../../src/shared/F_interfaces";
 
-interface FeatureFrontParams<ParamsType> {
-    out?: (chunk: string) => void,
-    err?: (chunk: string) => void,
-    params: ParamsType
-}
 export function execFeature<ParamsType, ReportType>(feature: FeatureType, params: FeatureFrontParams<ParamsType>) : Promise<Report<ReportType>> {
     return new Promise(async (resolve, reject) => {
         let channel = `execFeature`;

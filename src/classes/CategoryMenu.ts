@@ -3,6 +3,7 @@ import { Ide } from "./Ide";
 
 export enum CategoryMenuType {
     FileExplorer,
+    Cargo
 }
 
 export interface CategoryData {
@@ -13,6 +14,10 @@ export function getCategoryData(category: CategoryMenuType): CategoryData{
     if (category === CategoryMenuType.FileExplorer){
         return {
             title: "Explorator"
+        }
+    } else if (category === CategoryMenuType.Cargo){
+        return {
+            title: "Cargo"
         }
     } else {
         return {
@@ -32,7 +37,7 @@ export class CategoryMenu {
 
 
     // attributes
-    private category_selected: CategoryMenuType = CategoryMenuType.FileExplorer;
+    private category_selected: CategoryMenuType = CategoryMenuType.Cargo;
 
     constructor(){
         if (CategoryMenu.instance){
@@ -48,6 +53,7 @@ export class CategoryMenu {
 
     public select(category: CategoryMenuType, update: boolean = true){
         this.category_selected = category;
+        console.log(category)
         update && Ide.getInstance().updateReact();
     }
 

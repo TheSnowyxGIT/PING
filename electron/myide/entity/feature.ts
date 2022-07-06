@@ -1,6 +1,6 @@
 import { FeatureType } from "../../../src/shared/ideEnums";
 import { Report } from "../../../src/shared/report";
-import { MyProject} from "./project";
+import { MyProject } from "./project";
 
 export interface FeatureParams<ParamsType> {
     errCallback: (chunk: string) => void,

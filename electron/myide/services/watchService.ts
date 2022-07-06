@@ -10,8 +10,9 @@ class WatchService {
 
 
     public async loadNode(folder: MyNode, name: string): Promise<MyNode> {
-        let node = await MyNode.load(p.join(folder.getPath(), name), folder);
-        return node;
+        return new Promise((resolve, reject) => {
+            MyNode.load(p.join(folder.getPath(), name), folder).then(node => resolve(node)).catch(err => reject(err))
+        })
     }
 
     public async removeNode(node: MyNode){
@@ -38,10 +39,10 @@ export class ProjectWatcher {
 
     constructor(project: MyProject) {
         this.project_ = project;
-        this.watcher_ = chokidar.watch(project.getRootNode().getPath())
+        this.watcher_ = chokidar.watch(project.getRootNode().getPath(), {ignoreInitial: true, usePolling: true})
         this.ws_ = new WatchService();
 
-
+        
         this.watcher_.on("add", this.onAdd.bind(this));
         this.watcher_.on("addDir", this.onAddDir.bind(this));
         this.watcher_.on("unlink", this.onUnlink.bind(this));
@@ -64,10 +65,12 @@ export class ProjectWatcher {
         }
         if (folder){
             this.ws_.loadNode(folder, filename).then(node => {
-                const windows = BrowserWindow.getAllWindows();
-                windows[0].webContents.send("createFile", Report.getReport<F_Node>({isSuccess: true, data: F_NodeFrom(node)}))
+                if (node){
+                    const windows = BrowserWindow.getAllWindows();
+                    windows[0].webContents.send("createFile", Report.getReport<F_Node>({isSuccess: true, data: F_NodeFrom(node)}))
+                }
             })
-        }
+        } 
     }
 
     onAddDir(folderpath: string){
@@ -83,8 +86,10 @@ export class ProjectWatcher {
         }
         if (folder){
             this.ws_.loadNode(folder, foldername).then(node => {
-                const windows = BrowserWindow.getAllWindows();
-                windows[0].webContents.send("createFolder", Report.getReport<F_Node>({isSuccess: true, data: F_NodeFrom(node)}))
+                if (node){
+                     const windows = BrowserWindow.getAllWindows();
+                    windows[0].webContents.send("createFolder", Report.getReport<F_Node>({isSuccess: true, data: F_NodeFrom(node)}))
+                }
             })
         }
     }

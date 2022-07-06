@@ -2,6 +2,7 @@
  * This file defined all entry points of the mainProcess for the request did by the renderer proccess
  */
 import { FeatureType } from "../../src/shared/ideEnums";
+import { Report } from "../../src/shared/report";
 import * as controller from "../controllers/FeaturesController"
 import { on } from "./listener";
 
@@ -12,10 +13,11 @@ export interface ExecFeatureParams<ParamsType> {
     params: ParamsType
 }
 on<ExecFeatureParams<unknown>, unknown>("execFeature", async (params, e) => {
-    const report = await controller.execFeature<unknown>(params.feature, {
+    let report = await controller.execFeature<unknown>(params.feature, {
         outCallback: (chunk: string) => e.sender.send(params.outChannel, chunk),
         errCallback: (chunk: string) => e.sender.send(params.errChannel, chunk),
         params: params.params
     })
+    
     return report;
 })

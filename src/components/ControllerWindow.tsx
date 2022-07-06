@@ -4,6 +4,7 @@ import {Project} from "../classes/Project"
 import { CategoryMenuType, getCategoryData } from "../classes/CategoryMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import CargoWindow from "./CargoWindow/CargoWindow";
 
 interface ControllerWindowProps {
     project: Project | null,
@@ -31,6 +32,10 @@ class ControllerWindow extends React.Component<ControllerWindowProps, Controller
                     selectedNode={projectOpened ? projectOpened.selectedNode : null}
                 />
                 break;
+            case CategoryMenuType.Cargo:
+                activeWindow = <CargoWindow 
+                />
+                break;
             default:
                 break;
         }
@@ -39,7 +44,7 @@ class ControllerWindow extends React.Component<ControllerWindowProps, Controller
             <div className="controllerWindow">
                 <div className="header">
                     <span>{categoryData.title}</span>
-                    <div className="options">
+                    <div className="options" onClick={() => console.log(this.props.category)}>
                         <FontAwesomeIcon icon={faEllipsis}/>
                     </div>
                 </div>

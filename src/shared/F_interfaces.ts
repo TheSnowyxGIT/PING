@@ -15,3 +15,11 @@ export interface F_Project {
     rootNode: F_Node,
     aspects: F_Aspect[]
 };
+
+
+// others
+export interface FeatureFrontParams<ParamsType> {
+    out?: (chunk: string) => void,
+    err?: (chunk: string) => void,
+    params: ParamsType
+}

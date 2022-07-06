@@ -29,7 +29,7 @@ export function run_script(command: string, args: string[], path: string, opt?: 
             stdoutCallback = opt.stdout || stdoutCallback;
             stderrCallback = opt.stderr || stderrCallback;
         }
-
+        
         var child = child_process.spawn(command, args, {
             cwd: path
         });

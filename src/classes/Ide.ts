@@ -1,4 +1,6 @@
+import TerminalWindow from "../components/Terminal/TerminalWindow";
 import { CategoryMenu } from "./CategoryMenu";
+import { FeatureExecutor } from "./FeatureExecutor";
 import { Project } from "./Project";
 
 export class Ide {
@@ -16,7 +18,9 @@ export class Ide {
     // attributes
     public opened_project: Project | null = null;
     public categoryMenu = new CategoryMenu();
-
+    public featureExecutor = new FeatureExecutor();
+    // init component
+    private terminalWindow = new TerminalWindow({});
 
     // Constructor
     constructor(updateReact: () => void){

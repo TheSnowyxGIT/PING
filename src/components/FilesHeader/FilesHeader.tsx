@@ -21,7 +21,7 @@ class FilesHeader extends React.Component<FilesHeaderProps, FilesHeaderState> {
 
     render() {
         const projectOpened = Ide.getInstance().opened_project;
-        if (!projectOpened)
+        if (!projectOpened || !this.props.selectedFile)
             return null;
 
         return (

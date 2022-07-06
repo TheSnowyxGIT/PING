@@ -36,6 +36,7 @@ export class Project implements F_Project {
 
     public unselect(update: boolean = true){
       this.selectedNode = null;
+      this.selectedFile = null;
       // update React
       update && Ide.getInstance().updateReact();
   }
