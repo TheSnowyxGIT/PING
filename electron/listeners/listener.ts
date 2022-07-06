@@ -20,3 +20,4 @@ export async function on<ParamsType, ReportType>(channel: string, action: (param
         }
     })
 }
+

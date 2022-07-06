@@ -24,6 +24,8 @@ class LeftMenu extends React.Component<LeftMenuProps, LeftMenuState> {
                 }}/>
                 <MenuItem icon={faArrowAltCircleDown} onClick={()=>{
                     CategoryMenu.getInstance().select(CategoryMenuType.Cargo)
+                <MenuItem icon={faAngleDoubleRight} onClick={()=>{
+                    CategoryMenu.getInstance().select(CategoryMenuType.CratesIO)
                 }}/>
             </div>
          );

@@ -5,6 +5,7 @@ import { CategoryMenuType, getCategoryData } from "../classes/CategoryMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import CargoWindow from "./CargoWindow/CargoWindow";
+import CratesIOWindow from "./Crates/CratesIOWindow";
 
 interface ControllerWindowProps {
     project: Project | null,
@@ -35,6 +36,9 @@ class ControllerWindow extends React.Component<ControllerWindowProps, Controller
             case CategoryMenuType.Cargo:
                 activeWindow = <CargoWindow 
                 />
+                break;
+            case CategoryMenuType.CratesIO:
+                activeWindow = <CratesIOWindow />
                 break;
             default:
                 break;

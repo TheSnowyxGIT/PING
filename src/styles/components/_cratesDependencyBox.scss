@@ -1,0 +1,21 @@
+.crates-dependency {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: grey;
+    width: 150px;
+    height: 50px;
+    
+    .id {
+        align-items: flex-start;
+    }
+
+    .install {
+        position: absolute;
+        background-color: rgb(28, 180, 28); 
+        width: 50px;
+        height: 20px;
+        bottom: 0;
+        right: 0;
+    }
+}

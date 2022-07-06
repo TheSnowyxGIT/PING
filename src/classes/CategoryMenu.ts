@@ -1,9 +1,9 @@
 import { Ide } from "./Ide";
 
-
 export enum CategoryMenuType {
     FileExplorer,
     Cargo
+    CratesIO
 }
 
 export interface CategoryData {
@@ -18,6 +18,9 @@ export function getCategoryData(category: CategoryMenuType): CategoryData{
     } else if (category === CategoryMenuType.Cargo){
         return {
             title: "Cargo"
+    } else if (category === CategoryMenuType.CratesIO) {
+        return {
+            title: "Dependencies"
         }
     } else {
         return {

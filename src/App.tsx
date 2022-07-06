@@ -1,5 +1,6 @@
 import React from 'react';
 import AlertQueue from './components/Alerts/AlertQueue';
+import CratesIOWindow from './components/Crates/CratesIOWindow';
 import Main from './pages/main';
 
 interface AppProps {
@@ -8,7 +9,7 @@ interface AppProps {
  
 interface AppState {
 }
- 
+
 class App extends React.Component<AppProps, AppState> {
 
   constructor(props: AppProps) {
@@ -22,7 +23,7 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <div className="App">
         <AlertQueue />
-        <Main />
+        <Main/>
       </div>
     );
   }

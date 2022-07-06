@@ -10,8 +10,8 @@ export interface FeatureParams<ParamsType> {
 
 export interface Feature_ {
     /**
-     * @param project {@link Project_} on which the feature is executed.
-     * @param params  Parameters given to the features.
+     * @param project {@link Project_}//Project_} on which the feature is executed.
+     * @param params  Parame ters given to the features.
      * @return {@link ExecutionReport}
      */
     execute<ParamsType>(project: MyProject, params: FeatureParams<ParamsType>): Promise<Report<unknown>>;
