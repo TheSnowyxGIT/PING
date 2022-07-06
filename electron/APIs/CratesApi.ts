@@ -23,6 +23,7 @@ export interface DependenciesParams {
     name: string
     pageId: number
 }
+
 // get Crates dependencies by name
 export const getDependencies: ApiComponent<{ name: string , pageId :number}, F_CratesDependencies> = {
     syncSend: async function (data): Promise<Report<F_CratesDependencies>> {

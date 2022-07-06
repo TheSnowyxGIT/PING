@@ -31,3 +31,10 @@ export interface F_Dependency{
     id: string
     version: string
 }
+
+//others
+export interface FeatureFrontParams<ParamsType> {
+    out?: (chunk: string) => void,
+    err?: (chunk: string) => void,
+    params: ParamsType
+}

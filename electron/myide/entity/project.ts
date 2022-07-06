@@ -5,6 +5,7 @@ import { Aspect_ , AllAspects, F_AspectFrom} from "./aspect";
 import { Feature_ } from "./feature";
 import { F_NodeFrom, MyNode } from "./node";
 import * as p from "path"
+import { CratesService } from "../../myide/services/cratesService";
 
 
 export function F_ProjectFrom(project: MyProject): F_Project {
@@ -20,7 +21,7 @@ export class MyProject {
     private rootNode_: MyNode;
     private nodeService: NodeService;
     private aspects_: Set<Aspect_>;
-
+    private cratesService: CratesService // create crate service
     /**
      * Constructor
     */
@@ -28,6 +29,7 @@ export class MyProject {
         this.rootNode_ = rNode;
         this.aspects_ = new Set();
         this.nodeService = new NodeService();
+        this.cratesService = new CratesService();
     }
 
     /**
@@ -46,6 +48,10 @@ export class MyProject {
 
     public getNodeService(): NodeService {
         return this.nodeService;
+    }
+
+    public getCratesService() {
+        return this.cratesService;
     }
 
     /**

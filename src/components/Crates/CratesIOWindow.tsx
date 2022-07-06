@@ -121,7 +121,7 @@ class CratesIOWindow extends React.Component<CratesIOWindowProps, CratesIOWindow
                                 onDownload={() => CratesManager.getInstance().addInstalledDependency({
                                     id: dependency.id,
                                     version: dependency.lastestVersion
-                                })} />
+                                })}/>
                         })
                     }
                 </div>
