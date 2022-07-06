@@ -2,7 +2,7 @@ import { Ide } from "./Ide";
 
 export enum CategoryMenuType {
     FileExplorer,
-    Cargo
+    Cargo,
     CratesIO
 }
 
@@ -18,6 +18,7 @@ export function getCategoryData(category: CategoryMenuType): CategoryData{
     } else if (category === CategoryMenuType.Cargo){
         return {
             title: "Cargo"
+        }
     } else if (category === CategoryMenuType.CratesIO) {
         return {
             title: "Dependencies"
