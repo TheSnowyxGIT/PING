@@ -47,6 +47,20 @@ export class CratesService {
         config.dependencies[id] = version;
         var res = TOML.stringify(config);
         writeFileSync(join(project.getRootNode().getPath(), "Cargo.toml"), res)
+        //console.log(res);
+        return true;
+    }
+
+    public uninstallDependency(id: string) {
+        console.log("OKOKOKOK");
+        const project = MyIde.getCurrentProject();
+        if (project === null)
+            return false;
+        const configFile = readFileSync(join(project.getRootNode().getPath(), "Cargo.toml"), 'utf-8');
+        const config = TOML.parse(configFile);
+        delete config.dependencies[id];
+        var res = TOML.stringify(config);
+        writeFileSync(join(project.getRootNode().getPath(), "Cargo.toml"), res)
         console.log(res);
         return true;
     }

@@ -54,5 +54,14 @@ export class CratesManager {
                             Ide.getInstance().updateReact();
                         })
     }
+
+    removeDependency(dependencyId: string) {
+        window.features.execFeature<string, null>(FeatureType.CRATE_UNINSTALL_DEPENDENCY, { params: dependencyId })
+                        .then(report => {
+                            if (report.isSuccess)
+                                this.installedDependencies.splice(this.installedDependencies.findIndex(elm => elm.id === dependencyId))
+                            Ide.getInstance().updateReact();
+                        })
+    }
 }
 

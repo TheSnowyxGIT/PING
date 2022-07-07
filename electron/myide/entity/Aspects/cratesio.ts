@@ -48,6 +48,24 @@ class InstallDependency implements Feature_{
 
 }
 
+class UninstallDependency implements Feature_{
+
+    async execute(project: MyProject, params: FeatureParams<unknown>): Promise<Report<null>> {
+       return new Promise((resolve, _) => {
+        const arg = params.params as string;
+        resolve(Report.getReport({
+            isSuccess: CratesService.getInstance().uninstallDependency(arg),
+            data: null
+        }))
+       })
+    }
+
+    type(): FeatureType {
+        return FeatureType.CRATE_UNINSTALL_DEPENDENCY;
+    }
+
+}
+
 /**
  * ASPECT Cargo
  */
@@ -56,7 +74,7 @@ export default class CratesIO implements Aspect_ {
      * List of all features of this Aspect
      */
     private static features_: Feature_[] = [
-        new GetInstalled(), new InstallDependency()
+        new GetInstalled(), new InstallDependency(),  new UninstallDependency
     ]
 
     getType(): AspectType {
