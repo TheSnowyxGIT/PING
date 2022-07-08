@@ -6,15 +6,17 @@ interface CratesDependencyBoxProps {
     dependency: CratesDependency,
     installed: boolean,
     onDownload: () => void
+    onRemove: () => void
 }
  
 interface CratesDependencyBoxState {
+    isInstalled:boolean
 }
  
 class CratesDependencyBox extends React.Component<CratesDependencyBoxProps, CratesDependencyBoxState> {
     constructor(props: CratesDependencyBoxProps) {
         super(props);
-        this.state = {};
+        this.state = {isInstalled : this.props.installed};
     }
 
     render() { 
@@ -22,7 +24,21 @@ class CratesDependencyBox extends React.Component<CratesDependencyBoxProps, Crat
             <div className="crates-dependency">
                 <div className="id">{this.props.dependency.id}</div>
                 <div className="version"></div>
-                <button className="install" onClick={() => this.props.onDownload()}>{this.props.installed? "installed" : "install"}</button>
+                <button className="install" onClick={() => {
+                    if (this.state.isInstalled) {
+                        this.props.onRemove();
+                        this.setState({
+                                isInstalled: false
+                            }
+                        )
+                    }
+                    else {
+                        this.props.onDownload();
+                        this.setState({
+                            isInstalled: true
+                        })
+                    }
+                }}>{this.state.isInstalled? "uninstall" : "install"}</button>
             </div>
         );
     }
